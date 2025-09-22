@@ -6,12 +6,15 @@
 #ifdef ARDUINO
 #include <Arduino.h>
 
-void setup() {
-  hal_setup();
+void setup() {   
+    hal_setup();
+
+    lv_obj_t * scr = lv_scr_act();
+    init_screen(scr);
 }
 
 void loop() {
-  hal_loop();
+    hal_loop();
 }
 
 #else
