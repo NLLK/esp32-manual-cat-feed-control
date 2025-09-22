@@ -1,11 +1,36 @@
 #include "ui.h"
 
+#include <cstdlib>
+
 LV_FONT_DECLARE(Montserrat_20br);
 LV_FONT_DECLARE(Montserrat_20r);
 LV_FONT_DECLARE(Montserrat_14r);
 LV_IMAGE_DECLARE(CatImage);
 
+typedef struct {
+    lv_obj_t * checkbox;
+    lv_obj_t * image;
+    bool is_visible;
+} checkbox_data_t;
+
+static void checkbox_event_handler(lv_event_t * e) {
+    lv_event_code_t code = lv_event_get_code(e);
+    checkbox_data_t * data = (checkbox_data_t *)lv_event_get_user_data(e);
+    
+    if(code == LV_EVENT_CLICKED) {
+        data->is_visible = !data->is_visible;
+        
+        if(data->is_visible) {
+            lv_obj_clear_flag(data->image, LV_OBJ_FLAG_HIDDEN);
+        } else {
+            lv_obj_add_flag(data->image, LV_OBJ_FLAG_HIDDEN);
+        }
+    }
+}
+
 void meal_row_display_create(lv_obj_t* parent, const char* name){
+
+    checkbox_data_t* cb_data = (checkbox_data_t *)malloc(sizeof(checkbox_data_t));
 
     lv_obj_t * cont = lv_obj_create(parent); 
     lv_obj_set_scroll_dir(cont, LV_DIR_NONE); 
@@ -39,6 +64,13 @@ void meal_row_display_create(lv_obj_t* parent, const char* name){
     lv_obj_t* catImage = lv_image_create(checkbox);
     lv_image_set_src(catImage, &CatImage);
     lv_obj_align(catImage, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_add_flag(catImage, LV_OBJ_FLAG_HIDDEN);
+
+    cb_data->checkbox = checkbox;
+    cb_data->image = catImage;
+    cb_data->is_visible = false;
+
+    lv_obj_add_event_cb(checkbox, checkbox_event_handler, LV_EVENT_CLICKED, cb_data);
 }
 
 void statusbar_create(lv_obj_t* parent){
