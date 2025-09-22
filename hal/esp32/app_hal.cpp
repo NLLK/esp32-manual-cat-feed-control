@@ -43,5 +43,8 @@ void hal_loop(void)
 }
 
 void hal_setBrighness(uint8_t percents){
+    if (percents < 10){
+        percents = 10;
+    }
 	LVGL_CYD::backlight(255*percents/100);
 }

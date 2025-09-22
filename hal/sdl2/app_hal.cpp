@@ -5,6 +5,8 @@
 #include "drivers/sdl/lv_sdl_mousewheel.h"
 #include "drivers/sdl/lv_sdl_keyboard.h"
 
+#include "stdio.h"
+
 static lv_display_t *lvDisplay;
 static lv_indev_t *lvMouse;
 static lv_indev_t *lvMouseWheel;
@@ -52,4 +54,7 @@ void hal_loop(void)
     lv_timer_handler(); // Update the UI-
 }
 
-void hal_setBrighness(uint8_t percents){}
+void hal_setBrighness(uint8_t percents){
+    printf("set brightness: %d\n", percents);
+    fflush(stdout);
+}
