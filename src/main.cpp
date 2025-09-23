@@ -3,14 +3,19 @@
 
 #include "./client/ui/ui.h"
 
+void setup_lvgl(){
+    lv_obj_t * scr = lv_scr_act();
+    Ui ui;
+    ui.init_screen(scr);
+}
+
 #ifdef ARDUINO
 #include <Arduino.h>
 
 void setup() {   
     hal_setup();
 
-    lv_obj_t * scr = lv_scr_act();
-    init_screen(scr);
+    setup_lvgl();
 }
 
 void loop() {
@@ -24,8 +29,7 @@ int main(void)
 	lv_init();
 	hal_setup();
 
-    lv_obj_t * scr = lv_scr_act();
-    init_screen(scr);
+    setup_lvgl();
 
     while(1){
         hal_loop();

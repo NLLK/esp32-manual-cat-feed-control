@@ -1,0 +1,66 @@
+#ifndef CLIENT_UI_COMPONENTS_MEALROW
+#define CLIENT_UI_COMPONENTS_MEALROW
+
+#include <map>
+
+#include "lvgl.h"
+
+#include "../constants/MealType.h"
+#include "./CatCheckbox.hpp"
+
+LV_FONT_DECLARE(Montserrat_20br);
+LV_FONT_DECLARE(Montserrat_20r);
+LV_FONT_DECLARE(Montserrat_14r);
+
+class MealRowPort{
+    virtual ~MealRowPort(){};
+
+};
+
+class MealRow{
+public:
+
+    MealRow(MealType mealType): mealType(mealType){}
+
+    void create(lv_obj_t* parent){
+        lv_obj_t * cont = lv_obj_create(parent); 
+        lv_obj_set_scroll_dir(cont, LV_DIR_NONE); 
+        lv_obj_set_size(cont, 240, 60);
+        lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
+        lv_obj_set_style_pad_all(cont, 5, LV_PART_MAIN);
+        lv_obj_set_style_border_width(cont, 2, LV_STYLE_STATE_CMP_SAME );
+        lv_obj_set_style_border_color(cont, lv_color_hex(0xFFFFFF), LV_STYLE_STATE_CMP_SAME);
+        lv_obj_set_style_bg_color(cont, lv_color_hex(0x000000), LV_PART_MAIN);
+
+        lv_obj_t* mealNameLabel = lv_label_create(cont);
+        lv_label_set_text(mealNameLabel, mapMealTypeToRussianName.at(mealType));
+        lv_obj_set_style_text_font(mealNameLabel, &Montserrat_20br, 0);
+        lv_obj_align(mealNameLabel, LV_ALIGN_LEFT_MID, 0, 0);
+
+        lv_obj_t* timeLabel = lv_label_create(cont);
+        lv_label_set_text(timeLabel, "в 07:00");
+        lv_obj_set_style_text_font(timeLabel, &Montserrat_14r, 0);
+        lv_obj_align(timeLabel, LV_ALIGN_LEFT_MID, 108,0 );
+
+        checkbox.create(cont);
+    }
+
+    void setStatus(bool status){
+        this->status = status;
+    }
+
+private:
+    lv_obj_t* timeLabel;
+    MealType mealType;
+    CatCheckbox checkbox;
+    bool status = false;
+
+    std::map<MealType, const char*> mapMealTypeToRussianName{
+        {MealType::BREAKFAST, "ЗАВТРАК"},
+        {MealType::LUNCH, "ОБЕД"},
+        {MealType::DINNER, "УЖИН"},
+        {MealType::DINNER2, "УЖИН 2"}
+    };
+};  
+
+#endif

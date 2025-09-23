@@ -1,0 +1,11 @@
+#ifndef CLIENT_UI_CONSTANTS_MEALTYPE
+#define CLIENT_UI_CONSTANTS_MEALTYPE
+
+enum class MealType{
+    BREAKFAST,
+    LUNCH,
+    DINNER,
+    DINNER2
+};
+
+#endif
