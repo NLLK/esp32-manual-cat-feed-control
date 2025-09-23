@@ -2,11 +2,14 @@
 #include "app_hal.h"
 
 #include "./client/ui/ui.h"
+#include "./client/adapters/BrightnessControllerStatusbarAdapter.hpp"
 
 Ui ui;
+BrightnessControllerStatusbarAdapter brightnessControllerStatusbarAdapter;
 
 void setup_lvgl(){
     ui.init_screen(lv_scr_act());
+    ui.setStatusbarAdapter(&brightnessControllerStatusbarAdapter);
 }
 
 #ifdef ARDUINO

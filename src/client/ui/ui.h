@@ -20,6 +20,9 @@ class Ui{
 public: 
     Ui(){}
     void init_screen(lv_obj_t* parent);
+    void setStatusbarAdapter(StatusbarPort* adapter){
+        statusBar.setAdapter(adapter);
+    }
 
 private:
     MealRow mealRows[4] = {

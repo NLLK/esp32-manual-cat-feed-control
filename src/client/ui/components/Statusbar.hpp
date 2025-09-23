@@ -15,6 +15,10 @@ class Statusbar{
 public:
     Statusbar(StatusbarPort* port = nullptr):receiver(port){}
 
+    void setAdapter(StatusbarPort* port){
+        receiver = port;
+    }
+
     void create(lv_obj_t* parent){
         lv_obj_t * cont = lv_obj_create(parent); 
         
