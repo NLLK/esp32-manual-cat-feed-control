@@ -12,11 +12,6 @@
 #include "./components/MealRow.hpp"
 #include "./components/Statusbar.hpp"
 
-struct MealLvObjects{
-    lv_obj_t* timeLabel;
-    MealType type;
-};
-
 LV_FONT_DECLARE(Montserrat_20br);
 LV_FONT_DECLARE(Montserrat_20r);
 LV_FONT_DECLARE(Montserrat_14r);
@@ -27,13 +22,12 @@ public:
     void init_screen(lv_obj_t* parent);
 
 private:
-
-
-    struct{
-        lv_obj_t* timeLabel;
-        MealLvObjects meals[4];
-    } lvObjects;
-
+    MealRow mealRows[4] = {
+        MealRow(MealType::BREAKFAST), 
+        MealRow(MealType::LUNCH),
+        MealRow(MealType::DINNER),
+        MealRow(MealType::DINNER2)
+    };
 private:
     void create_schedule_screen(lv_obj_t * parent);
 };

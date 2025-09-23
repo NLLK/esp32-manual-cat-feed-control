@@ -3,10 +3,10 @@
 
 #include "./client/ui/ui.h"
 
+Ui ui;
+
 void setup_lvgl(){
-    lv_obj_t * scr = lv_scr_act();
-    Ui ui;
-    ui.init_screen(scr);
+    ui.init_screen(lv_scr_act());
 }
 
 #ifdef ARDUINO

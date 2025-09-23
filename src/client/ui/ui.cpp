@@ -40,15 +40,9 @@ void Ui::create_schedule_screen(lv_obj_t * parent) {
     Statusbar statusBar;
     statusBar.create(cont);
 
-    MealRow row1 = MealRow(MealType::BREAKFAST);
-    MealRow row2 = MealRow(MealType::LUNCH);
-    MealRow row3 = MealRow(MealType::DINNER);
-    MealRow row4 = MealRow(MealType::DINNER2);
-
-    row1.create(cont);
-    row2.create(cont);
-    row3.create(cont);
-    row4.create(cont);
+    for (int i = 0; i < 4; i++){
+        mealRows[i].create(cont);
+    }
 }
 
 void Ui::init_screen(lv_obj_t* parent){
