@@ -25,6 +25,9 @@ public:
     void setStatusbarAdapter(StatusbarPort* adapter){
         statusBar.setAdapter(adapter);
     }
+    StatusbarInterface* getStatusbarInterface(){
+        return &statusBar;
+    }
 
 private:
     MealRow mealRows[4] = {

@@ -1,14 +1,18 @@
 #include "tasks.h"
 #include "RTClib.h"
 
+#include "../../src/client/ui/components/Statusbar.hpp"
+#include "../../src/common/utils/CommonDateTime.hpp"
+
 RTC_DS1307 rtc;
 
 void task_time_update(void *pvParameters){
     const TickType_t xErrorDelay = (1000) / portTICK_PERIOD_MS;
 	const TickType_t xPollDelay = (1*60*1000) / portTICK_PERIOD_MS;
 
-	while(!rtc.begin(&Wire1))
-	{
+    StatusbarInterface* statusBar = (StatusbarInterface*)pvParameters;
+
+	while(!rtc.begin(&Wire1)){
 		static bool once = true;
 		if (once){
 			Serial.println("RTC DS1307 is not detected, check wiring.");
@@ -53,7 +57,13 @@ void task_time_update(void *pvParameters){
         Serial.print(now.second(), DEC);
         Serial.println();
 
-        vTaskDelay(xPollDelay);
+        CommonDateTime dt;
+        dt.setHours(now.hour());
+        dt.setMinutes(now.minute());
+        
+        statusBar->setTimeString(dt.getTimeString());
+
+        vTaskDelay((60-now.second())*1000/ portTICK_PERIOD_MS);
     }
 }
 
@@ -61,7 +71,7 @@ void task_time_set(void *pvParameters){
     // DateTimeSettings* settings = static_cast<DateTimeSettings*>(pvParameters);
 
     if (xSemaphoreTake(xRtcMutex, 5000) == pdTRUE){
-        // rtc.adjust(DateTime(settings->years, settings->months, settings->days, settings->hours, settings->minutes, settings->seconds));
+        // rtc.adjust(DateTime(2025, 9, 23, 19, 35, 00));
         xSemaphoreGive(xRtcMutex);
     }
 

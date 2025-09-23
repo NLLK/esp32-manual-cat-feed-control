@@ -3,6 +3,8 @@
 
 #include "lvgl.h"
 
+#include <string>
+
 LV_FONT_DECLARE(Montserrat_20r);
 
 class StatusbarPort{
@@ -11,7 +13,14 @@ public:
     virtual void clickedAtX(uint8_t x) = 0;
 };
 
-class Statusbar{
+class StatusbarInterface{
+public:
+    virtual ~StatusbarInterface(){};
+    virtual void setBatteryLevel(uint8_t prc) = 0; 
+    virtual void setTimeString(std::string timeStr) = 0; 
+};
+
+class Statusbar: public StatusbarInterface{
 public:
     Statusbar(StatusbarPort* port = nullptr):receiver(port){}
 
@@ -48,6 +57,19 @@ public:
 
         lv_obj_add_event_cb(cont, event_handler, LV_EVENT_PRESSED, this);
     }
+
+    void setBatteryLevel(uint8_t prc) override { 
+        
+        char buffer[5] = {'\0',};
+        
+        sprintf(buffer, "%d%%", prc);
+        lv_label_set_text(batLabel, buffer);
+    }
+
+    void setTimeString(std::string timeStr) override { 
+        lv_label_set_text(timeLabel, timeStr.c_str());
+    }
+
 private:
     lv_obj_t* timeLabel;
     lv_obj_t* batLabel;
