@@ -37,7 +37,6 @@ void Ui::create_schedule_screen(lv_obj_t * parent) {
     lv_obj_set_style_pad_all(cont, 0, LV_PART_MAIN);
     lv_obj_set_scrollbar_mode(cont, LV_SCROLLBAR_MODE_OFF);
 
-    Statusbar statusBar;
     statusBar.create(cont);
 
     for (int i = 0; i < 4; i++){

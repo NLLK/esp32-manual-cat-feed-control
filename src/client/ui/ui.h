@@ -28,6 +28,7 @@ private:
         MealRow(MealType::DINNER),
         MealRow(MealType::DINNER2)
     };
+    Statusbar statusBar;
 private:
     void create_schedule_screen(lv_obj_t * parent);
 };

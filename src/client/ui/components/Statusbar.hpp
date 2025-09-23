@@ -5,16 +5,19 @@
 
 LV_FONT_DECLARE(Montserrat_20r);
 
+class StatusbarPort{
+public:
+    virtual ~StatusbarPort(){};
+    virtual void clickedAtX(uint8_t x) = 0;
+};
+
 class Statusbar{
 public:
-    Statusbar(){}
+    Statusbar(StatusbarPort* port = nullptr):receiver(port){}
 
     void create(lv_obj_t* parent){
         lv_obj_t * cont = lv_obj_create(parent); 
         
-        // statusbar_cb_data_t* cb_data = new statusbar_cb_data_t();
-        // cb_data->cb_function = hal_setBrighness;
-
         lv_obj_set_size(cont, 240, 30);
         lv_obj_set_style_border_side(cont, LV_BORDER_SIDE_BOTTOM, 0);
         lv_obj_set_style_border_width(cont, 2, LV_STYLE_STATE_CMP_SAME);
@@ -39,34 +42,34 @@ public:
         lv_label_set_text(batLabel, "100%");
         lv_obj_set_style_text_font(batLabel, &Montserrat_20r, 0);
 
-        // lv_obj_add_event_cb(cont, statusbar_event_handler, LV_EVENT_PRESSED, cb_data);
+        lv_obj_add_event_cb(cont, event_handler, LV_EVENT_PRESSED, this);
     }
 private:
     lv_obj_t* timeLabel;
     lv_obj_t* batLabel;
 
+    StatusbarPort* receiver = nullptr;
+private:
+    static void event_handler(lv_event_t* e){
+        lv_event_code_t code = lv_event_get_code(e);
+        Statusbar* obj = (Statusbar*)lv_event_get_user_data(e);
+
+        if(code == LV_EVENT_PRESSED) {
+            lv_indev_t * indev = lv_indev_get_act();
+            lv_point_t point;
+            lv_indev_get_point(indev, &point);
+            
+            lv_obj_t* cont = (lv_obj_t*)lv_event_get_target(e);
+            int32_t x = point.x - lv_obj_get_x(cont);
+            obj->_statusBarPressed((x*100/lv_obj_get_width(cont)));
+        }
+    }
+
+    void _statusBarPressed(uint8_t value){
+        if (receiver != nullptr){
+            receiver->clickedAtX(value);
+        }
+    }
 };
-
-
-// typedef struct{
-//     std::function<void(uint8_t)> cb_function;
-// } statusbar_cb_data_t;
-
-
-// static void statusbar_event_handler(lv_event_t * e) {
-//     lv_event_code_t code = lv_event_get_code(e);
-//     statusbar_cb_data_t * data = (statusbar_cb_data_t *)lv_event_get_user_data(e);
-    
-//     if(code == LV_EVENT_PRESSED) {
-//         lv_indev_t * indev = lv_indev_get_act();
-//         lv_point_t point;
-//         lv_indev_get_point(indev, &point);
-        
-//         lv_obj_t* cont = (lv_obj_t*)lv_event_get_target(e);
-//         int32_t x = point.x - lv_obj_get_x(cont);
-//         data->cb_function((x/240.0f)*100);
-//     }
-// }
-
 
 #endif
