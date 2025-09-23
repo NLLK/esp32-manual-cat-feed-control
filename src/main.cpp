@@ -1,7 +1,7 @@
 #include "lvgl.h"
 #include "app_hal.h"
 
-#include "./client/ui/ui.h"
+#include "./client/ui/ui.hpp"
 #include "./client/adapters/BrightnessControllerStatusbarAdapter.hpp"
 
 Ui ui;
