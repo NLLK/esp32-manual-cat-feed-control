@@ -8,6 +8,7 @@
 #include <functional>
 
 #include "../ports/ClientAppearanceInterface.hpp"
+#include "../ports/UiMealStateChangedPort.hpp"
 
 #include "./components/MealRow.hpp"
 #include "./components/Statusbar.hpp"
@@ -15,12 +16,6 @@
 LV_FONT_DECLARE(Montserrat_20br);
 LV_FONT_DECLARE(Montserrat_20r);
 LV_FONT_DECLARE(Montserrat_14r);
-
-class UiMealStateChangedPort{
-public:
-    virtual ~UiMealStateChangedPort(){}
-    virtual void mealStateChanged(MealType mealType, bool newState) = 0;
-}; 
 
 class Ui: public ClientAppearanceInterface, public MealRowPort{
 public: 

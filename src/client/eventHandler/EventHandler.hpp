@@ -3,6 +3,7 @@
 
 #include "../../common/utils/CommonDateTime.hpp"
 #include "../ports/ClientAppearanceInterface.hpp"
+#include "../ports/UiMealStateChangedPort.hpp"
 
 class EventHandlerTimeUpdatePort{
 public:
@@ -16,7 +17,7 @@ public:
 //     virtual void setTime(CommonDateTime time) = 0;
 // };
 
-class EventHandler: public EventHandlerTimeUpdatePort, public UiMealStateChangedPort{
+class EventHandler: public EventHandlerTimeUpdatePort, public UiMealStateChangedPort {
 public:
     EventHandler(){}
 
