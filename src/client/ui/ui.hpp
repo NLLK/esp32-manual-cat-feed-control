@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include <functional>
 
-#include "app_hal.h"
+#include "../ports/ClientAppearanceInterface.hpp"
 
 #include "./components/MealRow.hpp"
 #include "./components/Statusbar.hpp"
@@ -16,7 +16,7 @@ LV_FONT_DECLARE(Montserrat_20br);
 LV_FONT_DECLARE(Montserrat_20r);
 LV_FONT_DECLARE(Montserrat_14r);
 
-class Ui{
+class Ui: public ClientAppearanceInterface{
 public: 
     Ui(){}
     void init_screen(lv_obj_t* parent){
@@ -25,17 +25,26 @@ public:
     void setStatusbarAdapter(StatusbarPort* adapter){
         statusBar.setAdapter(adapter);
     }
-    StatusbarInterface* getStatusbarInterface(){
-        return &statusBar;
+    void setCurrentTime(CommonDateTime time) override {
+        std::string str = time.getTimeString();
+        statusBar.setTimeString(str);
+    }
+    void setMealStatus(MealType type, bool status, CommonDateTime time) override {
+        mealRowsMap.at(type).setStatus(status);
+        mealRowsMap.at(type).setTimeString(time.getTimeString());
+    }
+    void setBatteryPercentage(unsigned short prc){
+        statusBar.setBatteryLevel(prc);
     }
 
 private:
-    MealRow mealRows[4] = {
-        MealRow(MealType::BREAKFAST), 
-        MealRow(MealType::LUNCH),
-        MealRow(MealType::DINNER),
-        MealRow(MealType::DINNER2)
+    std::map<MealType, MealRow> mealRowsMap{
+        {MealType::BREAKFAST, MealRow(MealType::BREAKFAST)},
+        {MealType::LUNCH, MealRow(MealType::LUNCH)},
+        {MealType::DINNER, MealRow(MealType::DINNER)},
+        {MealType::DINNER2, MealRow(MealType::DINNER2)}
     };
+
     Statusbar statusBar;
 private:
     void create_schedule_screen(lv_obj_t * parent){
@@ -56,8 +65,8 @@ private:
 
         statusBar.create(cont);
 
-        for (int i = 0; i < 4; i++){
-            mealRows[i].create(cont);
+        for (const auto& [key, value] : mealRowsMap){
+            mealRowsMap.at(key).create(cont);
         }
     }
 };

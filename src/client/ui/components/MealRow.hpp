@@ -5,7 +5,7 @@
 
 #include "lvgl.h"
 
-#include "../constants/MealType.h"
+#include "../../../common/constants/MealType.h"
 #include "./CatCheckbox.hpp"
 
 LV_FONT_DECLARE(Montserrat_20br);
@@ -38,7 +38,7 @@ public:
         lv_obj_align(mealNameLabel, LV_ALIGN_LEFT_MID, 0, 0);
 
         lv_obj_t* timeLabel = lv_label_create(cont);
-        lv_label_set_text(timeLabel, "в 07:00");
+        lv_label_set_text(timeLabel, "в 00:00");
         lv_obj_set_style_text_font(timeLabel, &Montserrat_14r, 0);
         lv_obj_align(timeLabel, LV_ALIGN_LEFT_MID, 108,0 );
 
@@ -47,6 +47,10 @@ public:
 
     void setStatus(bool status){
         this->status = status;
+    }
+
+    void setTimeString(std::string time){
+        lv_label_set_text(timeLabel, ("в " + time).c_str());
     }
 
 private:

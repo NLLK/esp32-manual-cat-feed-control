@@ -1,8 +1,7 @@
 #include "tasks.h"
 #include "RTClib.h"
 
-#include "../../src/client/ui/components/Statusbar.hpp"
-#include "../../src/common/utils/CommonDateTime.hpp"
+#include "../../src/client/eventHandler/EventHandler.hpp"
 
 RTC_DS1307 rtc;
 
@@ -10,7 +9,7 @@ void task_time_update(void *pvParameters){
     const TickType_t xErrorDelay = (1000) / portTICK_PERIOD_MS;
 	const TickType_t xPollDelay = (1*60*1000) / portTICK_PERIOD_MS;
 
-    StatusbarInterface* statusBar = (StatusbarInterface*)pvParameters;
+    EventHandlerTimeUpdatePort* ui = (EventHandlerTimeUpdatePort*)pvParameters;
 
 	while(!rtc.begin(&Wire1)){
 		static bool once = true;
@@ -57,11 +56,8 @@ void task_time_update(void *pvParameters){
         Serial.print(now.second(), DEC);
         Serial.println();
 
-        CommonDateTime dt;
-        dt.setHours(now.hour());
-        dt.setMinutes(now.minute());
-        
-        statusBar->setTimeString(dt.getTimeString());
+        CommonDateTime dt(now.year(), now.month(), now.day(), now.hour(), now.minute(), now.second());
+        ui->setTime(dt);
 
         vTaskDelay((60-now.second())*1000/ portTICK_PERIOD_MS);
     }

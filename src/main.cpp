@@ -2,16 +2,19 @@
 #include "app_hal.h"
 
 #include "./client/ui/ui.hpp"
+#include "./client/eventHandler/EventHandler.hpp"
 #include "./client/adapters/BrightnessControllerStatusbarAdapter.hpp"
 
 Ui ui;
+EventHandler eventHandler;
 BrightnessControllerStatusbarAdapter brightnessControllerStatusbarAdapter;
 
 void setup_lvgl(){
     ui.init_screen(lv_scr_act());
     ui.setStatusbarAdapter(&brightnessControllerStatusbarAdapter);
-    ui.getStatusbarInterface()->setBatteryLevel(0);
-    ui.getStatusbarInterface()->setTimeString("00:00");   
+    ui.setCurrentTime(CommonDateTime(0,1,1,12,34));
+
+    eventHandler.setClientAppearanceInterface(&ui);
 }
 
 #ifdef ARDUINO
@@ -39,7 +42,7 @@ void setup() {
         task_time_update,      // Function name of the task
         "Task RTC",   // Name of the task (e.g. for debugging)
         4096,        // Stack size (bytes)
-        (void*)ui.getStatusbarInterface(),        // Parameter to pass
+        (void*)&eventHandler,        // Parameter to pass
         2,           // Task priority
         NULL,        // Task handle
         1            // 
