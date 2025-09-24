@@ -16,7 +16,7 @@ public:
 //     virtual void setTime(CommonDateTime time) = 0;
 // };
 
-class EventHandler: public EventHandlerTimeUpdatePort{
+class EventHandler: public EventHandlerTimeUpdatePort, public UiMealStateChangedPort{
 public:
     EventHandler(){}
 
@@ -27,6 +27,10 @@ public:
     void setTime(CommonDateTime time){
         currentTime = time;
         clientAppearanceInterface->setCurrentTime(time);
+    }
+
+    void mealStateChanged(MealType mealType, bool newState){
+        clientAppearanceInterface->setMealStatus(mealType, newState, currentTime);
     }
 private:
     ClientAppearanceInterface* clientAppearanceInterface = nullptr;

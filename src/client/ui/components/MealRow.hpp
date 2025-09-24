@@ -13,14 +13,15 @@ LV_FONT_DECLARE(Montserrat_20r);
 LV_FONT_DECLARE(Montserrat_14r);
 
 class MealRowPort{
+public:
     virtual ~MealRowPort(){};
-
+    virtual void checkboxStateChanged(MealType mealType, bool newState) = 0; 
 };
 
-class MealRow{
+class MealRow: public CatCheckboxPort{
 public:
 
-    MealRow(MealType mealType): mealType(mealType){}
+    MealRow(MealType mealType, MealRowPort* port = nullptr): mealType(mealType), receiver(port){}
 
     void create(lv_obj_t* parent){
         lv_obj_t * cont = lv_obj_create(parent); 
@@ -37,12 +38,17 @@ public:
         lv_obj_set_style_text_font(mealNameLabel, &Montserrat_20br, 0);
         lv_obj_align(mealNameLabel, LV_ALIGN_LEFT_MID, 0, 0);
 
-        lv_obj_t* timeLabel = lv_label_create(cont);
-        lv_label_set_text(timeLabel, "в 00:00");
+        timeLabel = lv_label_create(cont);
+        setTimeString("00:00");
         lv_obj_set_style_text_font(timeLabel, &Montserrat_14r, 0);
         lv_obj_align(timeLabel, LV_ALIGN_LEFT_MID, 108,0 );
 
-        checkbox.create(cont);
+        checkbox = new CatCheckbox(this);
+        checkbox->create(cont);
+    }
+
+    void setReceiver(MealRowPort* port){
+        receiver = port;
     }
 
     void setStatus(bool status){
@@ -53,10 +59,18 @@ public:
         lv_label_set_text(timeLabel, ("в " + time).c_str());
     }
 
+    void stateChanged(bool newState) override{
+        if (receiver != nullptr){
+            receiver->checkboxStateChanged(mealType, newState);
+        }       
+    }
+
 private:
     lv_obj_t* timeLabel;
     MealType mealType;
-    CatCheckbox checkbox;
+    CatCheckbox* checkbox = nullptr;
+
+    MealRowPort* receiver = nullptr;
     bool status = false;
 
     std::map<MealType, const char*> mapMealTypeToRussianName{

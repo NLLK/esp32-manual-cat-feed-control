@@ -5,16 +5,17 @@
 #include "./client/eventHandler/EventHandler.hpp"
 #include "./client/adapters/BrightnessControllerStatusbarAdapter.hpp"
 
-Ui ui;
+Ui* ui;
 EventHandler eventHandler;
 BrightnessControllerStatusbarAdapter brightnessControllerStatusbarAdapter;
 
 void setup_lvgl(){
-    ui.init_screen(lv_scr_act());
-    ui.setStatusbarAdapter(&brightnessControllerStatusbarAdapter);
-    ui.setCurrentTime(CommonDateTime(0,1,1,12,34));
-
-    eventHandler.setClientAppearanceInterface(&ui);
+    ui = new Ui(&eventHandler);
+    ui->init_screen(lv_scr_act());
+    ui->setStatusbarAdapter(&brightnessControllerStatusbarAdapter);
+    eventHandler.setClientAppearanceInterface(ui);
+    
+    eventHandler.setTime(CommonDateTime(0,1,1,12,34));
 }
 
 #ifdef ARDUINO

@@ -16,9 +16,15 @@ LV_FONT_DECLARE(Montserrat_20br);
 LV_FONT_DECLARE(Montserrat_20r);
 LV_FONT_DECLARE(Montserrat_14r);
 
-class Ui: public ClientAppearanceInterface{
+class UiMealStateChangedPort{
+public:
+    virtual ~UiMealStateChangedPort(){}
+    virtual void mealStateChanged(MealType mealType, bool newState) = 0;
+}; 
+
+class Ui: public ClientAppearanceInterface, public MealRowPort{
 public: 
-    Ui(){}
+    Ui(UiMealStateChangedPort* mealStateChangedPort = nullptr):mealStateChangedPort(mealStateChangedPort){}
     void init_screen(lv_obj_t* parent){
         create_schedule_screen(parent);
     }
@@ -37,6 +43,12 @@ public:
         statusBar.setBatteryLevel(prc);
     }
 
+    void checkboxStateChanged(MealType mealType, bool newState) override{
+        if (mealStateChangedPort != nullptr){
+            mealStateChangedPort->mealStateChanged(mealType, newState);
+        }
+    }
+
 private:
     std::map<MealType, MealRow> mealRowsMap{
         {MealType::BREAKFAST, MealRow(MealType::BREAKFAST)},
@@ -46,6 +58,7 @@ private:
     };
 
     Statusbar statusBar;
+    UiMealStateChangedPort* mealStateChangedPort = nullptr;
 private:
     void create_schedule_screen(lv_obj_t * parent){
         lv_obj_t * cont = lv_obj_create(parent);
@@ -67,6 +80,7 @@ private:
 
         for (const auto& [key, value] : mealRowsMap){
             mealRowsMap.at(key).create(cont);
+            mealRowsMap.at(key).setReceiver(this);
         }
     }
 };
