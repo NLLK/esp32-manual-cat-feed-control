@@ -10,6 +10,5 @@ extern SemaphoreHandle_t xRtcMutex;
 
 void task_time_update(void *pvParameters);
 void task_time_set(void *pvParameters);
-void task_gui(void *pvParameters);
 
 #endif
