@@ -22,6 +22,7 @@ void setup_lvgl(){
 #include <Arduino.h>
 #include "./tasks/UsbCommandsTask.hpp"
 #include "./tasks/GuiUpdateTask.hpp"
+#include "RTClib.h"
 
 UsbCommandsTask usbTask;
 GuiUpdateTask guiTask;
