@@ -21,6 +21,9 @@ void setup_lvgl(){
 #ifdef ARDUINO
 #include <Arduino.h>
 #include "./tasks/tasks.h"
+#include "./tasks/UsbCommandsTask.hpp"
+
+UsbCommandsTask usbTask;
 
 void setup() {   
     hal_setup();
@@ -48,6 +51,8 @@ void setup() {
         NULL,        // Task handle
         1            // 
     );
+
+    usbTask.start();
 }
 
 void loop() {
