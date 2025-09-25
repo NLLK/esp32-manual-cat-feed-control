@@ -1,4 +1,6 @@
-#include <Arduino.h>
+#pragma once
+
+#include "Arduino.h"
 
 class Task {
 protected:
@@ -6,8 +8,9 @@ protected:
     const char* taskName;
     uint32_t stackDepth;
     UBaseType_t priority;
+    uint8_t core;
 
-    const uint8_t DEFAULT_CORE_FOR_TASKS = 1;
+    static const uint8_t DEFAULT_CORE_FOR_TASKS = 1;
     
     virtual void run() = 0;
 
@@ -20,8 +23,8 @@ protected:
     }
 
 public:
-    Task(const char* name, uint32_t stackSize, UBaseType_t prio) 
-        : taskName(name), stackDepth(stackSize), priority(prio) {}
+    Task(const char* name, uint32_t stackSize, UBaseType_t prio, uint8_t core = DEFAULT_CORE_FOR_TASKS) 
+        : taskName(name), stackDepth(stackSize), priority(prio), core(core) {}
     
     virtual ~Task() {
         stop();
@@ -39,7 +42,7 @@ public:
             this,            
             priority,       
             &taskHandle,    
-            DEFAULT_CORE_FOR_TASKS
+            core
         ) == pdPASS;
     }
     

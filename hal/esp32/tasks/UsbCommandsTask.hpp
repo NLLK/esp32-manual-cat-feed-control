@@ -1,16 +1,19 @@
-#ifndef USBCOMMANDSTASK_HPP
-#define USBCOMMANDSTASK_HPP
+#pragma once
 
-#include <Arduino.h>
+#include "Arduino.h"
 #include <ArduinoJson.h>
 
 #include "./Task.hpp"
+#include "../src/client/eventHandler/EventHandler.hpp"
+#include "../src/common/utils/CommonDateTime.hpp"
 
 class UsbCommandsTask: public Task{  
 public: 
-    UsbCommandsTask():Task("USBCommunication", 4096, 1){}
+    UsbCommandsTask(EventHandlerTimeUpdatePort* timeUpdatePort = nullptr):Task("USBCommunication", 4096, 1), timeUpdatePort(timeUpdatePort){}
 
 private:
+    EventHandlerTimeUpdatePort* timeUpdatePort = nullptr;
+
     char buffer[256];
     uint16_t bufferIndex = 0;
 
@@ -49,8 +52,11 @@ protected:
         }
         
         if(strcmp(command, "set_time") == 0) {
-           Serial.println("set_time");
+            CommonDateTime dt;
+            sscanf(doc["value"], "%d/%d/%d %d:%d", &dt.yearFrom2000, &dt.month, &dt.day, &dt.hours, &dt.minutes);
+            dt.yearFrom2000 -= 2000;
+
+            timeUpdatePort->setTime(dt);
         }
     }
 };
-#endif

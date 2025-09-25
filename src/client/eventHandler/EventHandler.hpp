@@ -11,12 +11,6 @@ public:
     virtual void setTime(CommonDateTime time) = 0;
 };
 
-// class EventHandlerPort{
-// public:
-//     virtual ~EventHandlerTimeUpdateInterface(){};
-//     virtual void setTime(CommonDateTime time) = 0;
-// };
-
 class EventHandler: public EventHandlerTimeUpdatePort, public UiMealStateChangedPort {
 public:
     EventHandler(){}

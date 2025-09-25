@@ -27,7 +27,7 @@ public:
         this->minutes = minutes;
     }
 
-protected:
+public:
     uint8_t yearFrom2000 = 0;
     uint8_t month = 1;
     uint8_t day = 1;
