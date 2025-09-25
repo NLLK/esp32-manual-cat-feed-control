@@ -22,28 +22,22 @@ void setup_lvgl(){
 #include <Arduino.h>
 #include "./tasks/UsbCommandsTask.hpp"
 #include "./tasks/GuiUpdateTask.hpp"
+#include "./tasks/RtcTimeUpdateTask.hpp"
 #include "RTClib.h"
 
 UsbCommandsTask usbTask;
 GuiUpdateTask guiTask;
+RtcTimeUpdateTask* rtcUpdateTask;
+SemaphoreHandle_t xRtcMutex;
 
 void setup() {   
     hal_setup();
     setup_lvgl();
 
-    // xSerialMutex = xSemaphoreCreateMutex();
-    // xRtcMutex = xSemaphoreCreateMutex();
+    xRtcMutex = xSemaphoreCreateMutex();
 
-    // xTaskCreatePinnedToCore(
-    //     task_time_update,      // Function name of the task
-    //     "Task RTC",   // Name of the task (e.g. for debugging)
-    //     4096,        // Stack size (bytes)
-    //     (void*)&eventHandler,        // Parameter to pass
-    //     2,           // Task priority
-    //     NULL,        // Task handle
-    //     1            // 
-    // );
-
+    rtcUpdateTask = new RtcTimeUpdateTask(&eventHandler, &xRtcMutex);
+    rtcUpdateTask->start();
     guiTask.start();
     usbTask.start();
 }
