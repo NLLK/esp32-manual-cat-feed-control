@@ -52,8 +52,8 @@ protected:
             DateTime now = rtc.now();
 
             if (xSemaphoreTake(*xRtcMutex, 5000) == pdTRUE){
-                // DateTimeSettings currentTime(now.year(), now.month(), now.day(), now.hour(), now.minute(), now.second());
-                // DependenciesManager::getDateTimeController()->setSettings(currentTime);
+                CommonDateTime dt(now.year(), now.month(), now.day(), now.hour(), now.minute(), now.second());
+                timeUpdatePort->updateTime(dt);
                 xSemaphoreGive(*xRtcMutex);
             }
 
@@ -70,9 +70,6 @@ protected:
             Serial.print(':');
             Serial.print(now.second(), DEC);
             Serial.println();
-
-            CommonDateTime dt(now.year(), now.month(), now.day(), now.hour(), now.minute(), now.second());
-            timeUpdatePort->setTime(dt);
 
             vTaskDelay((60-now.second())*1000/ portTICK_PERIOD_MS);
         }

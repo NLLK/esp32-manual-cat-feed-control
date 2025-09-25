@@ -9,10 +9,10 @@
 
 class UsbCommandsTask: public Task{  
 public: 
-    UsbCommandsTask(EventHandlerTimeUpdatePort* timeUpdatePort = nullptr):Task("USBCommunication", 4096, 1), timeUpdatePort(timeUpdatePort){}
+    UsbCommandsTask(EventHandlerTimeSetPort* timeUpdatePort = nullptr):Task("USBCommunication", 4096, 1), timeUpdatePort(timeUpdatePort){}
 
 private:
-    EventHandlerTimeUpdatePort* timeUpdatePort = nullptr;
+    EventHandlerTimeSetPort* timeUpdatePort = nullptr;
 
     char buffer[256];
     uint16_t bufferIndex = 0;

@@ -5,13 +5,21 @@
 #include "../ports/ClientAppearanceInterface.hpp"
 #include "../ports/UiMealStateChangedPort.hpp"
 
+#include "app_hal.h"
+
 class EventHandlerTimeUpdatePort{
 public:
     virtual ~EventHandlerTimeUpdatePort(){};
+    virtual void updateTime(CommonDateTime time) = 0;
+};
+
+class EventHandlerTimeSetPort{
+public:
+    virtual ~EventHandlerTimeSetPort(){};
     virtual void setTime(CommonDateTime time) = 0;
 };
 
-class EventHandler: public EventHandlerTimeUpdatePort, public UiMealStateChangedPort {
+class EventHandler: public EventHandlerTimeUpdatePort, public EventHandlerTimeSetPort, public UiMealStateChangedPort {
 public:
     EventHandler(){}
 
@@ -19,9 +27,14 @@ public:
         this->clientAppearanceInterface = clientAppearanceInterface;
     }
 
-    void setTime(CommonDateTime time){
+    void updateTime(CommonDateTime time){
         currentTime = time;
         clientAppearanceInterface->setCurrentTime(time);
+    }
+
+    void setTime(CommonDateTime time){
+        hal_setTimeToRtc(time);
+        updateTime(time);
     }
 
     void mealStateChanged(MealType mealType, bool newState){

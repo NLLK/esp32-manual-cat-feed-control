@@ -58,3 +58,8 @@ void hal_setBrighness(uint8_t percents){
     printf("set brightness: %d\n", percents);
     fflush(stdout);
 }
+
+void hal_setTimeToRtc(CommonDateTime time){
+    printf("set time\n");
+    fflush(stdout);
+}

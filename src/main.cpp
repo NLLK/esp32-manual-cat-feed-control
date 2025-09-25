@@ -15,7 +15,7 @@ void setup_lvgl(){
     ui->setStatusbarAdapter(&brightnessControllerStatusbarAdapter);
     eventHandler.setClientAppearanceInterface(ui);
     
-    eventHandler.setTime(CommonDateTime(0,1,1,12,34));
+    eventHandler.updateTime(CommonDateTime(0,1,1,12,34));
 }
 
 #ifdef ARDUINO
@@ -23,9 +23,10 @@ void setup_lvgl(){
 #include "./tasks/UsbCommandsTask.hpp"
 #include "./tasks/GuiUpdateTask.hpp"
 #include "./tasks/RtcTimeUpdateTask.hpp"
+#include "./tasks/RtcTimeSetTask.hpp"
 #include "RTClib.h"
 
-UsbCommandsTask usbTask;
+UsbCommandsTask* usbTask;
 GuiUpdateTask guiTask;
 RtcTimeUpdateTask* rtcUpdateTask;
 SemaphoreHandle_t xRtcMutex;
@@ -36,10 +37,14 @@ void setup() {
 
     xRtcMutex = xSemaphoreCreateMutex();
 
+    rtcTimeSetTaskSingletone = new RtcTimeSetTask(&xRtcMutex);
+
     rtcUpdateTask = new RtcTimeUpdateTask(&eventHandler, &xRtcMutex);
     rtcUpdateTask->start();
     guiTask.start();
-    usbTask.start();
+
+    usbTask = new UsbCommandsTask(&eventHandler);
+    usbTask->start();
 }
 
 void loop() {

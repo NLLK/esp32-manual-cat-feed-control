@@ -2,6 +2,8 @@
 #include <Wire.h>
 #include <LVGL_CYD.h>
 
+RtcTimeSetTask* rtcTimeSetTaskSingletone;
+
 void hal_setup(void)
 {
 	LVGL_CYD::begin(USB_DOWN);
@@ -23,4 +25,9 @@ void hal_setBrighness(uint8_t percents){
         percents = 10;
     }
 	LVGL_CYD::backlight(255*percents/100);
+}
+
+void hal_setTimeToRtc(CommonDateTime time){
+	rtcTimeSetTaskSingletone->setTime(time);
+	rtcTimeSetTaskSingletone->start();
 }
