@@ -1,11 +1,12 @@
 #ifndef CLIENT_EVENTHANDLER_EVENTHANDLER_HPP
 #define CLIENT_EVENTHANDLER_EVENTHANDLER_HPP
 
-#include "../../common/utils/CommonDateTime.hpp"
+#include "../../../common/utils/CommonDateTime.hpp"
 #include "../ports/ClientAppearanceInterface.hpp"
 #include "../ports/UiMealStateChangedPort.hpp"
-
-#include "app_hal.h"
+#include "../ports/RTCContollerPort.hpp"
+#include "../ports/BrightnessControllerPort.hpp"
+#include "../ports/UiBrightnessChangeRequestPort.hpp"
 
 class EventHandlerTimeUpdatePort{
 public:
@@ -19,9 +20,10 @@ public:
     virtual void setTime(CommonDateTime time) = 0;
 };
 
-class EventHandler: public EventHandlerTimeUpdatePort, public EventHandlerTimeSetPort, public UiMealStateChangedPort {
+class EventHandler: public EventHandlerTimeUpdatePort, public EventHandlerTimeSetPort, public UiMealStateChangedPort, public UiBrightnessChangeRequestPort {
 public:
-    EventHandler(){}
+    EventHandler(RTCControllerPort* rtc = nullptr, BrightnessControllerPort* brightnessController = nullptr):
+        rtc(rtc), brightnessController(brightnessController){}
 
     void setClientAppearanceInterface(ClientAppearanceInterface* clientAppearanceInterface){
         this->clientAppearanceInterface = clientAppearanceInterface;
@@ -33,8 +35,12 @@ public:
     }
 
     void setTime(CommonDateTime time){
-        hal_setTimeToRtc(time);
+        rtc->setCurrentTime(time);
         updateTime(time);
+    }
+
+    void setBrightness(uint8_t percent){
+        brightnessController->setBrightness(percent);
     }
 
     void mealStateChanged(MealType mealType, bool newState){
@@ -43,6 +49,9 @@ public:
 private:
     ClientAppearanceInterface* clientAppearanceInterface = nullptr;
     CommonDateTime currentTime;
+
+    RTCControllerPort* rtc = nullptr;
+    BrightnessControllerPort* brightnessController = nullptr;
 };
 
 #endif

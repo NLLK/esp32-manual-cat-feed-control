@@ -10,7 +10,7 @@ LV_FONT_DECLARE(Montserrat_20r);
 class StatusbarPort{
 public:
     virtual ~StatusbarPort(){};
-    virtual void clickedAtX(uint8_t x) = 0;
+    virtual void statusBarClickedAtX(uint8_t x) = 0;
 };
 
 class StatusbarInterface{
@@ -87,13 +87,13 @@ private:
             
             lv_obj_t* cont = (lv_obj_t*)lv_event_get_target(e);
             int32_t x = point.x - lv_obj_get_x(cont);
-            obj->_statusBarPressed((x*100/lv_obj_get_width(cont)));
+            obj->_statusBarPressed(x);
         }
     }
 
     void _statusBarPressed(uint8_t value){
         if (receiver != nullptr){
-            receiver->clickedAtX(value);
+            receiver->statusBarClickedAtX(value);
         }
     }
 };

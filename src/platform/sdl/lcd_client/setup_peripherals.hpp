@@ -1,3 +1,6 @@
+#pragma once
+
+
 #include <unistd.h>
 #define SDL_MAIN_HANDLED        /*To fix SDL's "undefined reference to WinMain" issue*/
 #include <SDL2/SDL.h>
@@ -5,13 +8,10 @@
 #include "drivers/sdl/lv_sdl_mousewheel.h"
 #include "drivers/sdl/lv_sdl_keyboard.h"
 
-#include "stdio.h"
-
 static lv_display_t *lvDisplay;
 static lv_indev_t *lvMouse;
 static lv_indev_t *lvMouseWheel;
 static lv_indev_t *lvKeyboard;
-
 
 #if LV_USE_LOG != 0
 static void lv_log_print_g_cb(lv_log_level_t level, const char * buf)
@@ -21,9 +21,7 @@ static void lv_log_print_g_cb(lv_log_level_t level, const char * buf)
 }
 #endif
 
-
-void hal_setup(void)
-{
+void setup_lvgl(){
     // Workaround for sdl2 `-m32` crash
     // https://bugs.launchpad.net/ubuntu/+source/libsdl2/+bug/1775067/comments/7
     #ifndef WIN32
@@ -42,24 +40,4 @@ void hal_setup(void)
     lvMouse = lv_sdl_mouse_create();
     lvMouseWheel = lv_sdl_mousewheel_create();
     lvKeyboard = lv_sdl_keyboard_create();
-}
-
-void hal_loop(void)
-{
-    static Uint32 lastTick = SDL_GetTicks();
-    SDL_Delay(5);
-    Uint32 current = SDL_GetTicks();
-    lv_tick_inc(current - lastTick); // Update the tick timer. Tick is new for LVGL 9
-    lastTick = current;
-    lv_timer_handler(); // Update the UI-
-}
-
-void hal_setBrighness(uint8_t percents){
-    printf("set brightness: %d\n", percents);
-    fflush(stdout);
-}
-
-void hal_setTimeToRtc(CommonDateTime time){
-    printf("set time\n");
-    fflush(stdout);
 }

@@ -9,22 +9,26 @@
 
 #include "../ports/ClientAppearanceInterface.hpp"
 #include "../ports/UiMealStateChangedPort.hpp"
+#include "../ports/UiBrightnessChangeRequestPort.hpp"
 
 #include "./components/MealRow.hpp"
 #include "./components/Statusbar.hpp"
+
+#include "./mappers/StatusBarXToPercentsMapper.hpp"
 
 LV_FONT_DECLARE(Montserrat_20br);
 LV_FONT_DECLARE(Montserrat_20r);
 LV_FONT_DECLARE(Montserrat_14r);
 
-class Ui: public ClientAppearanceInterface, public MealRowPort{
+class Ui: public ClientAppearanceInterface, public MealRowPort, public StatusbarPort{
 public: 
-    Ui(UiMealStateChangedPort* mealStateChangedPort = nullptr):mealStateChangedPort(mealStateChangedPort){}
+    Ui(UiMealStateChangedPort* mealStateChangedPort = nullptr, UiBrightnessChangeRequestPort* brightnessChangePort = nullptr)
+        :mealStateChangedPort(mealStateChangedPort), brightnessChangePort(brightnessChangePort){
+            statusBar.setAdapter(this);
+        }
+
     void init_screen(lv_obj_t* parent){
         create_schedule_screen(parent);
-    }
-    void setStatusbarAdapter(StatusbarPort* adapter){
-        statusBar.setAdapter(adapter);
     }
     void setCurrentTime(CommonDateTime time) override {
         std::string str = time.getTimeString();
@@ -36,6 +40,10 @@ public:
     }
     void setBatteryPercentage(unsigned short prc){
         statusBar.setBatteryLevel(prc);
+    }
+
+    void statusBarClickedAtX(uint8_t x){
+        brightnessChangePort->setBrightness(statusBarXToPercentsMapper.map(x));
     }
 
     void checkboxStateChanged(MealType mealType, bool newState) override{
@@ -54,6 +62,9 @@ private:
 
     Statusbar statusBar;
     UiMealStateChangedPort* mealStateChangedPort = nullptr;
+    UiBrightnessChangeRequestPort* brightnessChangePort = nullptr;
+    StatusBarXToPercentsMapper statusBarXToPercentsMapper;
+
 private:
     void create_schedule_screen(lv_obj_t * parent){
         lv_obj_t * cont = lv_obj_create(parent);

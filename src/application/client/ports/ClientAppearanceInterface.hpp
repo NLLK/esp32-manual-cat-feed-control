@@ -1,8 +1,8 @@
 #ifndef CLIENT_PORTS_CLIENTAPPEARANCEINTERFACE_HPP
 #define CLIENT_PORTS_CLIENTAPPEARANCEINTERFACE_HPP
 
-#include "../../common/constants/MealType.h"
-#include "../../common/utils/CommonDateTime.hpp"
+#include "../../../common/constants/MealType.h"
+#include "../../../common/utils/CommonDateTime.hpp"
 
 class ClientAppearanceInterface{
 public:
