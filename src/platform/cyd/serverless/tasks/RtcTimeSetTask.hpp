@@ -2,7 +2,7 @@
 
 #include "RTClib.h"
 #include "./Task.hpp"
-#include "../src/common/utils/CommonDateTime.hpp"
+#include "../../../../common/utils/CommonDateTime.hpp"
 
 #include <Wire.h>
 
@@ -33,6 +33,7 @@ protected:
 
             xSemaphoreGive(*xRtcMutex);
         }
+        //TODO: fix - time could be set only once per restart
         stop();
     }
 };
