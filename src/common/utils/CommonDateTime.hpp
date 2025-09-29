@@ -27,6 +27,14 @@ public:
         this->minutes = minutes;
     }
 
+    bool isTheSameDay(const CommonDateTime& d){
+        return (yearFrom2000 == d.yearFrom2000 && month == d.month && day == d.day);
+    }
+
+    bool isEmpty(){
+        return yearFrom2000 == 0 && month == 1 && day == 1; //for now, when we still can't travel in time, it's seems enough
+    }
+
 public:
     uint8_t yearFrom2000 = 0;
     uint8_t month = 1;
