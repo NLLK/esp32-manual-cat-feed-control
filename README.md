@@ -1,6 +1,7 @@
 # esp32-manual-cat-feed-control
 
 # Project structure
+```
 src/                      # Root of source code
 ├── application/          # Platfrom independent application layer
 │   ├── client/           # Main logic for client code
@@ -14,3 +15,4 @@ src/                      # Root of source code
     │   └── lcd_client/   # LCD Client designed for LVGL Debug
     └── c3/               # ESP32-C3 Platform
         └── web_server/   # Cheap HTTP server on ESP32-C3 Platform (includes both HTTP-server and HTTP-client)
+```
