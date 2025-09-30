@@ -9,4 +9,5 @@ public:
     virtual void updateMealStatus(MealEntity entity) = 0;
     virtual DaysMeals getMealsOfTheDay(CommonDateTime day) = 0;
     virtual CommonDateTime getCurrentTime() = 0;
+    virtual void setCurrentTime(CommonDateTime time) = 0;
 };

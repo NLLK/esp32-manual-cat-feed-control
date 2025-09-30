@@ -43,7 +43,7 @@ src/                      # Root of the source code
     │   ├── serverless/   # LCD Client + Serverless configuration for the local usage
     |   └── combined/     # LCD Client + HTTP Server + HTTP Client
     ├── sdl/              # SDL Platform (For now, mainly for LVGL Debug)
-    │   └── lcd_client/   # LCD Client designed for LVGL Debug
+    │   └── serverless/   # LCD Client designed for LVGL Debug
     └── c3/               # ESP32-C3 Platform
         └── web_server/   # Cheap HTTP server on the ESP32-C3 Platform (includes both HTTP-server and HTTP-client)
 ```

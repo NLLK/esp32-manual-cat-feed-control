@@ -7,7 +7,7 @@
 
 #include "../common/adapters/RTCContollerAdapter.hpp"
 #include "../common/adapters/BrightnessControllerAdapter.hpp"
-#include "./adapters/ServerConnectionAdapter.hpp"
+#include "./adapters/ServerConnectionProxyAdapter.hpp"
 
 #include "../common/tasks/GuiUpdateTask.hpp"
 #include "../common/tasks/RtcTimeUpdateTask.hpp"
@@ -36,8 +36,6 @@ void setup_application(){
     ui = new Ui(eventHandler, eventHandler);
     ui->init_screen(lv_scr_act());
     eventHandler->setClientAppearanceInterface(ui);
-    
-    eventHandler->updateTime(CommonDateTime(25,1,1,12,34));
 }
 
 void setup_tasks(){
@@ -68,7 +66,7 @@ void setup(){
 
     setup_application();
     setup_server();
-    serverConnectionProxyAdapter->setServerEventHanlder(serverEventHandler);
+    serverConnectionProxyAdapter->setServerEventHandler(serverEventHandler);
 
     setup_tasks();
     start_tasks();

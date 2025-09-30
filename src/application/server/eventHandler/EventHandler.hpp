@@ -18,7 +18,8 @@ public:
 
 class EventHandler : public EventHandlerTimeUpdatePort, public EventHandlerTimeSetPort{
 public: 
-    EventHandler(DaysMealsService* daysMealsService = nullptr) : daysMealsService(daysMealsService){
+    EventHandler(DaysMealsService* daysMealsService = nullptr, RTCControllerPort* rtc = nullptr) 
+        : daysMealsService(daysMealsService), rtc(rtc){
 
     }
 

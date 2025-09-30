@@ -33,6 +33,7 @@ protected:
             timeUpdatePort->updateTime(currentTime);
 
             vTaskDelay((60-currentTime.seconds) * TASK_CONST_SECOND);
+            currentTime.seconds = 0;
             incrementMinutes();
         }
     }
@@ -55,11 +56,11 @@ private:
     }
 
     void incrementMinutes(){
-        uint8_t day = currentTime.day;
+        uint8_t hour = currentTime.hours;
 
         currentTime.incrementMinutes(1);
 
-        if (day != currentTime.day){
+        if (hour != currentTime.hours){
             attemptToSyncronizeTimeWithServer(5);
         }
     }

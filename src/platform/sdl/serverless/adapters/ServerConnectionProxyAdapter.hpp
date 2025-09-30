@@ -8,7 +8,7 @@ public:
     ServerConnectionProxyAdapter(ApplicationServer::EventHandler* serverEventHandler = nullptr) 
         : serverEventHandler(serverEventHandler){}
 
-    void setServerEventHanlder(ApplicationServer::EventHandler* serverEventHandler){
+    void setServerEventHandler(ApplicationServer::EventHandler* serverEventHandler){
         this->serverEventHandler = serverEventHandler;
     }
 
@@ -21,6 +21,10 @@ public:
     CommonDateTime getCurrentTime(){
         return serverEventHandler->getCurrentTime();
     }
+    void setCurrentTime(CommonDateTime time){
+        serverEventHandler->setTime(time);
+    }   
+
 private:
     ApplicationServer::EventHandler* serverEventHandler = nullptr;
 };
