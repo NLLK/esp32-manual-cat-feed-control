@@ -21,6 +21,9 @@ public:
     CommonDateTime getCurrentTime(){
         return serverEventHandler->getCurrentTime();
     }
+    void setCurrentTime(CommonDateTime time){
+        serverEventHandler->setTime(time);
+    }
 private:
     ApplicationServer::EventHandler* serverEventHandler = nullptr;
 };
