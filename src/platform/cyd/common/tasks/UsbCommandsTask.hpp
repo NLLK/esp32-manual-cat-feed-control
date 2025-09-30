@@ -7,6 +7,7 @@
 #include "../../../../application/client/eventHandler/EventHandler.hpp"
 #include "../../../../common/utils/CommonDateTime.hpp"
 
+//TODO: depricated; pending removal
 class UsbCommandsTask: public Task{  
 public: 
     UsbCommandsTask(EventHandlerTimeSetPort* timeUpdatePort = nullptr):Task("USBCommunication", 4096, 1), timeUpdatePort(timeUpdatePort){}

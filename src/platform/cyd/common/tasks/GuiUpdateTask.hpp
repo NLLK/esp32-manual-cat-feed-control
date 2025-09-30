@@ -10,7 +10,7 @@ public:
 
 protected:
     void run() override {
-        Serial.println("Rtc Time Set task started");
+        Serial.println("LVGL update task started");
 
         const TickType_t xDelay = (1000/60) / portTICK_PERIOD_MS;
 

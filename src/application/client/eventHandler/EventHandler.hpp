@@ -1,10 +1,8 @@
-#ifndef CLIENT_EVENTHANDLER_EVENTHANDLER_HPP
-#define CLIENT_EVENTHANDLER_EVENTHANDLER_HPP
+#pragma once
 
 #include "../../../common/utils/CommonDateTime.hpp"
 #include "../ports/ClientAppearanceInterface.hpp"
 #include "../ports/UiMealStateChangedPort.hpp"
-#include "../ports/RTCContollerPort.hpp"
 #include "../ports/BrightnessControllerPort.hpp"
 #include "../ports/UiBrightnessChangeRequestPort.hpp"
 
@@ -14,16 +12,10 @@ public:
     virtual void updateTime(CommonDateTime time) = 0;
 };
 
-class EventHandlerTimeSetPort{
+class EventHandler: public EventHandlerTimeUpdatePort, public UiMealStateChangedPort, public UiBrightnessChangeRequestPort {
 public:
-    virtual ~EventHandlerTimeSetPort(){};
-    virtual void setTime(CommonDateTime time) = 0;
-};
-
-class EventHandler: public EventHandlerTimeUpdatePort, public EventHandlerTimeSetPort, public UiMealStateChangedPort, public UiBrightnessChangeRequestPort {
-public:
-    EventHandler(RTCControllerPort* rtc = nullptr, BrightnessControllerPort* brightnessController = nullptr):
-        rtc(rtc), brightnessController(brightnessController){}
+    EventHandler(BrightnessControllerPort* brightnessController = nullptr):
+        brightnessController(brightnessController){}
 
     void setClientAppearanceInterface(ClientAppearanceInterface* clientAppearanceInterface){
         this->clientAppearanceInterface = clientAppearanceInterface;
@@ -35,7 +27,6 @@ public:
     }
 
     void setTime(CommonDateTime time){
-        rtc->setCurrentTime(time);
         updateTime(time);
     }
 
@@ -50,8 +41,5 @@ private:
     ClientAppearanceInterface* clientAppearanceInterface = nullptr;
     CommonDateTime currentTime;
 
-    RTCControllerPort* rtc = nullptr;
     BrightnessControllerPort* brightnessController = nullptr;
 };
-
-#endif

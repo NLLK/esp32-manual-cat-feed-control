@@ -7,50 +7,54 @@
 
 #include "../common/adapters/RTCContollerAdapter.hpp"
 #include "../common/adapters/BrightnessControllerAdapter.hpp"
+#include "./adapters/ServerConnectionAdapter.hpp"
 
-#include "../common/tasks/UsbCommandsTask.hpp"
 #include "../common/tasks/GuiUpdateTask.hpp"
 #include "../common/tasks/RtcTimeUpdateTask.hpp"
 #include "../common/tasks/RtcTimeSetTask.hpp"
+#include "../common/tasks/ClientUpdateTimeTask.hpp"
+
+#include "./server_setup.hpp"
 
 Ui* ui;
 EventHandler* eventHandler;
 RTCContollerAdapter rtc;
 BrightnessControllerAdapter brightness;
 
-UsbCommandsTask* usbTask;
+ServerConnectionProxyAdapter* serverConnectionProxyAdapter;
+
 GuiUpdateTask guiTask;
+ClientUpdateTimeTask* clientUpdateTimeTask;
 RtcTimeUpdateTask* rtcUpdateTask;
 RtcTimeSetTask* rtcSetTask;
 SemaphoreHandle_t xRtcMutex;
 
 void setup_application(){
-    eventHandler = new EventHandler(&rtc, &brightness);
+    serverConnectionProxyAdapter = new ServerConnectionProxyAdapter();
+    eventHandler = new EventHandler(&brightness);
 
     ui = new Ui(eventHandler, eventHandler);
     ui->init_screen(lv_scr_act());
     eventHandler->setClientAppearanceInterface(ui);
     
-    eventHandler->updateTime(CommonDateTime(0,1,1,12,34));
+    eventHandler->updateTime(CommonDateTime(25,1,1,12,34));
 }
 
 void setup_tasks(){
-
     xRtcMutex = xSemaphoreCreateMutex();
 
     rtcSetTask = new RtcTimeSetTask(&xRtcMutex);
-    rtcUpdateTask = new RtcTimeUpdateTask(eventHandler, &xRtcMutex);
-    usbTask = new UsbCommandsTask(eventHandler); 
+    rtcUpdateTask = new RtcTimeUpdateTask(serverEventHandler, &xRtcMutex);
+
+    rtc.setTimeSetTask(rtcSetTask);
+
+    clientUpdateTimeTask = new ClientUpdateTimeTask(eventHandler, serverConnectionProxyAdapter);
 }
 
 void start_tasks(){
     rtcUpdateTask->start();
     guiTask.start();
-    usbTask->start();
-}
-
-void post_task_setup(){
-    rtc.setTimeSetTask(rtcSetTask);
+    clientUpdateTimeTask->start();
 }
 
 void setup(){
@@ -63,10 +67,10 @@ void setup(){
   	Wire1.begin(21, 22);
 
     setup_application();
+    setup_server();
+    serverConnectionProxyAdapter->setServerEventHanlder(serverEventHandler);
+
     setup_tasks();
-
-    post_task_setup();
-
     start_tasks();
 }
 

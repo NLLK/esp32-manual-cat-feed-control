@@ -5,17 +5,16 @@
 #include <Wire.h>
 
 #include "./Task.hpp"
-#include "../../../../application/client/eventHandler/EventHandler.hpp"
+#include "../../../../application/server/eventHandler/EventHandler.hpp"
 #include "../../../../common/utils/CommonDateTime.hpp"
 
 class RtcTimeUpdateTask: public Task{
 public:
-    RtcTimeUpdateTask(EventHandlerTimeUpdatePort* timeUpdatePort = nullptr, SemaphoreHandle_t* xRtcMutex = nullptr): 
-        Task("RtcUpdate", 4096, 1), timeUpdatePort(timeUpdatePort), xRtcMutex(xRtcMutex){
+    RtcTimeUpdateTask(ApplicationServer::EventHandlerTimeUpdatePort* timeUpdatePort = nullptr, SemaphoreHandle_t* xRtcMutex = nullptr): 
+        Task("RtcUpdate", 4096, 1), timeUpdatePort(timeUpdatePort), xRtcMutex(xRtcMutex){}
 
-    }
 private:
-    EventHandlerTimeUpdatePort* timeUpdatePort = nullptr;
+    ApplicationServer::EventHandlerTimeUpdatePort* timeUpdatePort = nullptr;
     SemaphoreHandle_t* xRtcMutex = nullptr;
     RTC_DS1307 rtc;
 
@@ -48,7 +47,6 @@ protected:
         Serial.println("RTC DS1307 is Ready.");
 
         while(1){
-
             DateTime now = rtc.now();
 
             if (xSemaphoreTake(*xRtcMutex, 5000) == pdTRUE){

@@ -2,6 +2,8 @@
 
 #include <Arduino.h>
 
+#define TASK_CONST_SECOND (1000 / portTICK_PERIOD_MS)
+
 class Task {
 protected:
     TaskHandle_t taskHandle = nullptr;
@@ -9,6 +11,7 @@ protected:
     uint32_t stackDepth;
     UBaseType_t priority;
     uint8_t core;
+    uint32_t delayBeforeStartMs = 0;
 
     static const uint8_t DEFAULT_CORE_FOR_TASKS = 1;
     
@@ -17,6 +20,7 @@ protected:
     static void taskFunction(void* params) {
         Task* task = static_cast<Task*>(params);
         if(task) {
+            vTaskDelay(task->delayBeforeStartMs / portTICK_PERIOD_MS);
             task->run();
         }
         vTaskDelete(nullptr);
@@ -67,5 +71,9 @@ public:
     
     bool isRunning() const {
         return taskHandle != nullptr;
+    }
+
+    void setDelayBeforeStart(uint32_t delay){
+        delayBeforeStartMs = delay;
     }
 };

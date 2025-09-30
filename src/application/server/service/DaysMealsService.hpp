@@ -25,6 +25,14 @@ public:
         return 0;
     }
 
+    DaysMeals getMealsOfTheDay(CommonDateTime day){
+        DaysMeals result;
+
+        int err = daysMealsRepository->getByDay(day, &result);
+
+        return result;
+    }
+
 private:
     DaysMealsRepository* daysMealsRepository = nullptr;
 
