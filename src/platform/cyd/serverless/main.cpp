@@ -5,13 +5,13 @@
 #include "../../../application/client/eventHandler/EventHandler.hpp"
 #include "../../../application/client/ui/ui.hpp"
 
-#include "./adapters/RTCContollerAdapter.hpp"
-#include "./adapters/BrightnessControllerAdapter.hpp"
+#include "../common/adapters/RTCContollerAdapter.hpp"
+#include "../common/adapters/BrightnessControllerAdapter.hpp"
 
-#include "./tasks/UsbCommandsTask.hpp"
-#include "./tasks/GuiUpdateTask.hpp"
-#include "./tasks/RtcTimeUpdateTask.hpp"
-#include "./tasks/RtcTimeSetTask.hpp"
+#include "../common/tasks/UsbCommandsTask.hpp"
+#include "../common/tasks/GuiUpdateTask.hpp"
+#include "../common/tasks/RtcTimeUpdateTask.hpp"
+#include "../common/tasks/RtcTimeSetTask.hpp"
 
 Ui* ui;
 EventHandler* eventHandler;
