@@ -2,7 +2,7 @@
 
 #include "../../../../application/server/repository/DaysMealsRepository.hpp"
 
-class DaysMealsRepositoryImpl: public DaysMealsRepository{
+class DaysMealsRepositoryInMemoryImpl: public DaysMealsRepository{
 public:
     int create(DaysMeals entity){
         return -1;

@@ -5,6 +5,8 @@
 #include "../ports/UiMealStateChangedPort.hpp"
 #include "../ports/BrightnessControllerPort.hpp"
 #include "../ports/UiBrightnessChangeRequestPort.hpp"
+#include "../ports/ServerConnectionPort.hpp"
+
 
 class EventHandlerTimeUpdatePort{
 public:
@@ -14,11 +16,15 @@ public:
 
 class EventHandler: public EventHandlerTimeUpdatePort, public UiMealStateChangedPort, public UiBrightnessChangeRequestPort {
 public:
-    EventHandler(BrightnessControllerPort* brightnessController = nullptr):
-        brightnessController(brightnessController){}
+    EventHandler(BrightnessControllerPort* brightnessController = nullptr, ServerConnectionPort* serverConnection = nullptr):
+        brightnessController(brightnessController), serverConnection(serverConnection){}
 
     void setClientAppearanceInterface(ClientAppearanceInterface* clientAppearanceInterface){
         this->clientAppearanceInterface = clientAppearanceInterface;
+    }
+
+    void setServerConnection(ServerConnectionPort* serverConnection){
+        this->serverConnection = serverConnection;
     }
 
     void updateTime(CommonDateTime time){
@@ -36,10 +42,16 @@ public:
 
     void mealStateChanged(MealType mealType, bool newState){
         clientAppearanceInterface->setMealStatus(mealType, newState, currentTime);
+
+        MealEntity meal(mealType, newState, currentTime);
+        serverConnection->updateMealStatus(meal);
     }
 private:
+    //DI
     ClientAppearanceInterface* clientAppearanceInterface = nullptr;
-    CommonDateTime currentTime;
-
+    ServerConnectionPort* serverConnection = nullptr;
     BrightnessControllerPort* brightnessController = nullptr;
+
+    //state
+    CommonDateTime currentTime;
 };

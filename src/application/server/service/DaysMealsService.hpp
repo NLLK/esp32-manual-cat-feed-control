@@ -15,8 +15,9 @@ public:
         bool foundInList = false;
         DaysMeals foundDate = findDateInList(&mealsDates, meal.getDateTime(), &foundInList);
 
+        foundDate.append(meal);
+        
         if (!foundInList){
-            foundDate.append(meal);
             daysMealsRepository->create(foundDate);
         }else{
             daysMealsRepository->update(foundDate);

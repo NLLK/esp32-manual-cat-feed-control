@@ -20,7 +20,7 @@ ServerConnectionProxyAdapter* serverConnectionProxyAdapter;
 
 void setup_application(){
     serverConnectionProxyAdapter = new ServerConnectionProxyAdapter();
-    eventHandler = new EventHandler(&brightness);
+    eventHandler = new EventHandler(&brightness, serverConnectionProxyAdapter);
 
     ui = new Ui(eventHandler, eventHandler);
     ui->init_screen(lv_scr_act());
