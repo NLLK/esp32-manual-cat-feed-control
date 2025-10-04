@@ -1,6 +1,6 @@
 #pragma once 
 
-#include "../../../common/constants/MealType.h"
+#include "common/constants/MealType.h"
 
 class UiMealStateChangedPort{
 public:

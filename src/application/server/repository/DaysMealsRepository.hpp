@@ -2,7 +2,7 @@
 
 #include "list"
 
-#include "../../../common/model/DaysMeals.hpp"
+#include "common/model/DaysMeals.hpp"
 
 class DaysMealsRepository{
 public:

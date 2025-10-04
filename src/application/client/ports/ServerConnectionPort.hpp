@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../../common/model/MealEntity.hpp"
-#include "../../../common/model/DaysMeals.hpp"
+#include "common/model/MealEntity.hpp"
+#include "common/model/DaysMeals.hpp"
 
 class ServerConnectionPort{
 public:

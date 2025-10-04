@@ -5,7 +5,7 @@
 
 #include "lvgl.h"
 
-#include "../../../../common/constants/MealType.h"
+#include "common/constants/MealType.h"
 #include "./CatCheckbox.hpp"
 
 LV_FONT_DECLARE(Montserrat_20br);

@@ -2,7 +2,7 @@
 
 #include "stdio.h"
 
-#include "../../../../application/server/ports/RTCContollerPort.hpp"
+#include "application/server/ports/RTCContollerPort.hpp"
 
 class RTCContollerAdapter : public RTCControllerPort{
 public: 

@@ -4,8 +4,8 @@
 #include <ArduinoJson.h>
 
 #include "./Task.hpp"
-#include "../../../../application/client/eventHandler/EventHandler.hpp"
-#include "../../../../common/utils/CommonDateTime.hpp"
+#include "application/client/eventHandler/EventHandler.hpp"
+#include "common/utils/CommonDateTime.hpp"
 
 //TODO: depricated; pending removal
 class UsbCommandsTask: public Task{  

@@ -2,8 +2,8 @@
 #include <Wire.h>
 #include "RTClib.h"
 
-#include "../../../application/client/eventHandler/EventHandler.hpp"
-#include "../../../application/client/ui/ui.hpp"
+#include "application/client/eventHandler/EventHandler.hpp"
+#include "application/client/ui/ui.hpp"
 
 #include "../common/adapters/RTCContollerAdapter.hpp"
 #include "../common/adapters/BrightnessControllerAdapter.hpp"
@@ -17,7 +17,7 @@
 #include "./server_setup.hpp"
 #include "./fs_setup.hpp"
 
-#include "../../../middleware/logger/Logger.hpp"
+#include "middleware/logger/Logger.hpp"
 #include "../common/adapters/LoggerAdapter.hpp"
 
 Ui* ui;

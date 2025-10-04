@@ -5,8 +5,8 @@
 #include <Wire.h>
 
 #include "./Task.hpp"
-#include "../../../../application/server/eventHandler/EventHandler.hpp"
-#include "../../../../common/utils/CommonDateTime.hpp"
+#include "application/server/eventHandler/EventHandler.hpp"
+#include "common/utils/CommonDateTime.hpp"
 
 class RtcTimeUpdateTask: public Task{
 public:

@@ -4,8 +4,8 @@
 
 #include "setup_peripherals.hpp"
 
-#include "../../../application/client/eventHandler/EventHandler.hpp"
-#include "../../../application/client/ui/ui.hpp"
+#include "application/client/eventHandler/EventHandler.hpp"
+#include "application/client/ui/ui.hpp"
 
 #include "./adapters/RTCContollerAdapter.hpp"
 #include "./adapters/BrightnessControllerAdapter.hpp"

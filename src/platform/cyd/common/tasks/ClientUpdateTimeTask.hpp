@@ -3,9 +3,9 @@
 #include "Arduino.h"
 
 #include "./Task.hpp"
-#include "../../../../application/client/eventHandler/EventHandler.hpp"
-#include "../../../../application/client/ports/ServerConnectionPort.hpp"
-#include "../../../../common/utils/CommonDateTime.hpp"
+#include "application/client/eventHandler/EventHandler.hpp"
+#include "application/client/ports/ServerConnectionPort.hpp"
+#include "common/utils/CommonDateTime.hpp"
 
 class ClientUpdateTimeTask: public Task{
 public:

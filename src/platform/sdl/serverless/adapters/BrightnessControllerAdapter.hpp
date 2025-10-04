@@ -2,7 +2,7 @@
 
 #include "stdio.h"
 
-#include "../../../../application/client/ports/BrightnessControllerPort.hpp"
+#include "application/client/ports/BrightnessControllerPort.hpp"
 
 class BrightnessControllerAdapter: public BrightnessControllerPort{
 public:

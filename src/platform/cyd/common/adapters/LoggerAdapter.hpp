@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../../middleware/logger/LoggerPort.hpp"
+#include "middleware/logger/LoggerPort.hpp"
 
 #include "Arduino.h"
 

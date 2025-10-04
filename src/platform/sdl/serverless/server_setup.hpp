@@ -1,5 +1,5 @@
-#include "../../../application/server/eventHandler/EventHandler.hpp"
-#include "../../../application/server/service/DaysMealsService.hpp"
+#include "application/server/eventHandler/EventHandler.hpp"
+#include "application/server/service/DaysMealsService.hpp"
 #include "./adapters/DaysMealsRepositoryInMemoryImpl.hpp"
 
 ApplicationServer::EventHandler* serverEventHandler;

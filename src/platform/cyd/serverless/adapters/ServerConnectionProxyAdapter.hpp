@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../../../application/client/ports/ServerConnectionPort.hpp"
-#include "../../../../application/server/eventHandler/EventHandler.hpp"
+#include "application/client/ports/ServerConnectionPort.hpp"
+#include "application/server/eventHandler/EventHandler.hpp"
 
 class ServerConnectionProxyAdapter: public ServerConnectionPort{
 public:

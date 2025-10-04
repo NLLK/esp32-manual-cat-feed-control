@@ -2,7 +2,7 @@
 
 #include "../repository/DaysMealsRepository.hpp"
 
-#include "../../../common/model/MealEntity.hpp"
+#include "common/model/MealEntity.hpp"
 
 class DaysMealsService{
 public: 
