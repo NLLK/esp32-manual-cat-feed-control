@@ -1,11 +1,11 @@
-#ifndef CLIENT_UI_UI_H
-#define CLIENT_UI_UI_H
+#pragma once
 
-#include "lvgl.h"
-
+#include <memory>
 #include <map>
 #include <cstdlib>
 #include <functional>
+
+#include "lvgl.h"
 
 #include "../ports/ClientAppearanceInterface.hpp"
 #include "../ports/UiMealStateChangedPort.hpp"
@@ -15,6 +15,9 @@
 #include "./components/Statusbar.hpp"
 
 #include "./mappers/StatusBarXToPercentsMapper.hpp"
+
+#include "middleware/logger/Logger.hpp"
+#define CLASS_NAME_HEADER std::string("client.Ui: ")
 
 LV_FONT_DECLARE(Montserrat_20br);
 LV_FONT_DECLARE(Montserrat_20r);
@@ -30,35 +33,43 @@ public:
     void init_screen(lv_obj_t* parent){
         create_schedule_screen(parent);
     }
+
     void setCurrentTime(CommonDateTime time) override {
+        LOG.info(CLASS_NAME_HEADER + "setCurrentTime called: %s", time.getTimeString().c_str());
         std::string str = time.getTimeString();
         statusBar.setTimeString(str);
     }
+    
     void setMealStatus(MealType type, bool status, CommonDateTime time) override {
-        mealRowsMap.at(type).setStatus(status);
-        mealRowsMap.at(type).setTimeString(time.getTimeString());
+        LOG.info(CLASS_NAME_HEADER + "setMealStatus called: %s, %b, %s",
+            MealTypeStringMapper::map(type).c_str(), status, time.getTimeString().c_str());
+             
+        getMealRowByType(type)->setStatus(status);
+        getMealRowByType(type)->setTimeString(time.getTimeString());
     }
+
     void setBatteryPercentage(unsigned short prc){
+        LOG.info(CLASS_NAME_HEADER + "setBatteryPercentage called: %d", prc);
         statusBar.setBatteryLevel(prc);
     }
 
     void statusBarClickedAtX(uint8_t x){
+        LOG.info(CLASS_NAME_HEADER + "updateTime called");
         brightnessChangePort->setBrightness(statusBarXToPercentsMapper.map(x));
     }
 
     void checkboxStateChanged(MealType mealType, bool newState) override{
+        LOG.info(CLASS_NAME_HEADER + "updateTime called");
         if (mealStateChangedPort != nullptr){
             mealStateChangedPort->mealStateChanged(mealType, newState);
         }
     }
 
 private:
-    std::map<MealType, MealRow> mealRowsMap{
-        {MealType::BREAKFAST, MealRow(MealType::BREAKFAST)},
-        {MealType::LUNCH, MealRow(MealType::LUNCH)},
-        {MealType::DINNER, MealRow(MealType::DINNER)},
-        {MealType::DINNER2, MealRow(MealType::DINNER2)}
-    };
+    MealRow mealBreakfast = MealRow(MealType::BREAKFAST);
+    MealRow mealLunch = MealRow(MealType::LUNCH);
+    MealRow mealDinner = MealRow(MealType::DINNER);
+    MealRow mealDinner2 = MealRow(MealType::DINNER2);
 
     Statusbar statusBar;
     UiMealStateChangedPort* mealStateChangedPort = nullptr;
@@ -84,11 +95,30 @@ private:
 
         statusBar.create(cont);
 
-        for (const auto& [key, value] : mealRowsMap){
-            mealRowsMap.at(key).create(cont);
-            mealRowsMap.at(key).setReceiver(this);
-        }
-    }
-};
+        getMealRowByType(MealType::BREAKFAST)->create(cont);
+        getMealRowByType(MealType::LUNCH)->create(cont);
+        getMealRowByType(MealType::DINNER)->create(cont);
+        getMealRowByType(MealType::DINNER2)->create(cont);
 
-#endif
+        getMealRowByType(MealType::BREAKFAST)->setReceiver(this);
+        getMealRowByType(MealType::LUNCH)->setReceiver(this);
+        getMealRowByType(MealType::DINNER)->setReceiver(this);
+        getMealRowByType(MealType::DINNER2)->setReceiver(this);
+    }
+
+    MealRow* getMealRowByType(MealType type){
+        switch (type)
+        {
+        case MealType::BREAKFAST:
+            return &mealBreakfast;
+        case MealType::LUNCH:
+            return &mealLunch;
+        case MealType::DINNER:
+            return &mealDinner;
+        case MealType::DINNER2:
+            return &mealDinner2;
+        default:
+            return nullptr;
+        }
+    }    
+};

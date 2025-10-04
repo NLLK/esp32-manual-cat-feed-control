@@ -5,6 +5,8 @@
 #include "./LoggerPort.hpp"
 #include "./LoggingLevel.h"
 
+#define LOG Logger::getInstance()
+
 class Logger{
 public:
     static Logger& getInstance(){
@@ -20,30 +22,21 @@ public:
     }
 
     // Public functions
-    void info(const std::string& message){
-        log(LoggingLevel::INFO, message);
-    }
-    void info(const char* format, ...){
+    void info(std::string format, ...){
         va_list args;
         va_start(args, format);
         log(LoggingLevel::INFO, format, &args);
         va_end(args);
     }
 
-    void debug(const std::string& message){
-        log(LoggingLevel::DEBUG, message);
-    }
-    void debug(const char* format, ...){
+    void debug(std::string format, ...){
         va_list args;
         va_start(args, format);
-        log(LoggingLevel::DEBUG, format, &args);
+        log(LoggingLevel::INFO, format, &args);
         va_end(args);
     }
 
-    void error(const std::string& message){
-        log(LoggingLevel::ERROR, message);
-    }
-    void error(const char* format, ...){
+    void error(std::string format, ...){
         va_list args;
         va_start(args, format);
         log(LoggingLevel::ERROR, format, &args);
@@ -67,9 +60,9 @@ private:
         return static_cast<int>(level) <= static_cast<int>(loggingLevel);
     }
 
-    void log(LoggingLevel level, const char* format, va_list* args){
+    void log(LoggingLevel level, std::string format, va_list* args){
         char buffer[1024] = {'\0',};
-        vsnprintf(buffer, sizeof(buffer), format, *args);
+        vsnprintf(buffer, sizeof(buffer), format.c_str(), *args);
         std::string str = std::string(buffer);
         log(level, str);
     }

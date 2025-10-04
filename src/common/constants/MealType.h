@@ -10,7 +10,7 @@ enum class MealType{
     DINNER2
 };
 
-class MealTypeToString{
+class MealTypeStringMapper{
 public:
     static std::string map(MealType mealType){
         switch(mealType){

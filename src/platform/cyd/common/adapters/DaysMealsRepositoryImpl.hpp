@@ -30,7 +30,7 @@ public:
 
             JsonObject entityObj = mealsArray.createNestedObject();
             entityObj["status"] = entity.getStatus();
-            entityObj["type_str"] = MealTypeToString::map(entity.getType());
+            entityObj["type_str"] = MealTypeStringMapper::map(entity.getType());
             entityObj["type"] = (int)entity.getType();
             entityObj["time"] = entity.getDateTime().getTimeString();
         }

@@ -7,6 +7,8 @@
 #include "../ports/UiBrightnessChangeRequestPort.hpp"
 #include "../ports/ServerConnectionPort.hpp"
 
+#include "middleware/logger/Logger.hpp"
+#define CLASS_NAME_HEADER std::string("client.EventHandler: ")
 
 class EventHandlerTimeUpdatePort{
 public:
@@ -28,19 +30,23 @@ public:
     }
 
     void updateTime(CommonDateTime time){
+        LOG.info(CLASS_NAME_HEADER + "updateTime called");
         currentTime = time;
         clientAppearanceInterface->setCurrentTime(time);
     }
 
     void setTime(CommonDateTime time){
+        LOG.info(CLASS_NAME_HEADER + "setTime called");
         updateTime(time);
     }
 
     void setBrightness(uint8_t percent){
+        LOG.info(CLASS_NAME_HEADER + "setBrightness");
         brightnessController->setBrightness(percent);
     }
 
     void mealStateChanged(MealType mealType, bool newState){
+        LOG.info(CLASS_NAME_HEADER + "mealStateChanged called: %s %d", MealTypeStringMapper::map(mealType).c_str(), newState);
         clientAppearanceInterface->setMealStatus(mealType, newState, currentTime);
 
         MealEntity meal(mealType, newState, currentTime);

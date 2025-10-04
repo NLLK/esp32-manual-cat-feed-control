@@ -10,6 +10,7 @@
 #include "./adapters/RTCContollerAdapter.hpp"
 #include "./adapters/BrightnessControllerAdapter.hpp"
 #include "./adapters/ServerConnectionProxyAdapter.hpp"
+#include "./adapters/LoggerAdapter.hpp"
 
 #include "./server_setup.hpp"
 
@@ -40,6 +41,8 @@ int main(void)
 {
 	lv_init();
     setup_lvgl();
+
+    Logger::setLoggerPort(new LoggerAdapter());
 
     setup_application();
     setup_server();
