@@ -17,6 +17,9 @@
 #include "./server_setup.hpp"
 #include "./fs_setup.hpp"
 
+#include "../../../middleware/logger/Logger.hpp"
+#include "../common/adapters/LoggerAdapter.hpp"
+
 Ui* ui;
 EventHandler* eventHandler;
 RTCContollerAdapter rtc;
@@ -65,10 +68,14 @@ void setup(){
   	Serial.begin(115200);       	
   	Wire1.begin(21, 22);
 
+    Logger::setLoggerPort(new LoggerAdapter());
+
     setup_application();
     setup_fs();
     setup_server();
     serverConnectionProxyAdapter->setServerEventHandler(serverEventHandler);
+
+    Logger::getInstance().info("Application is ready");
 
     setup_tasks();
     start_tasks();
