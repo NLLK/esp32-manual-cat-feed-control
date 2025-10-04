@@ -41,11 +41,15 @@ public:
     }
     
     void setMealStatus(MealType type, bool status, CommonDateTime time) override {
-        LOG.info(CLASS_NAME_HEADER + "setMealStatus called: %s, %b, %s",
+        LOG.info(CLASS_NAME_HEADER + "setMealStatus called: %s, %d, %s",
             MealTypeStringMapper::map(type).c_str(), status, time.getTimeString().c_str());
              
         getMealRowByType(type)->setStatus(status);
-        getMealRowByType(type)->setTimeString(time.getTimeString());
+        if (status){
+            getMealRowByType(type)->setTimeString(time.getTimeString());
+        }else{
+            getMealRowByType(type)->setTimeString("");
+        }
     }
 
     void setBatteryPercentage(unsigned short prc){

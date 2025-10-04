@@ -39,7 +39,7 @@ public:
         lv_obj_align(mealNameLabel, LV_ALIGN_LEFT_MID, 0, 0);
 
         timeLabel = lv_label_create(cont);
-        setTimeString("00:00");
+        lv_label_set_text(timeLabel, "");
         lv_obj_set_style_text_font(timeLabel, &Montserrat_14r, 0);
         lv_obj_align(timeLabel, LV_ALIGN_LEFT_MID, 108,0 );
 
@@ -53,10 +53,17 @@ public:
 
     void setStatus(bool status){
         this->status = status;
+        checkbox->setStatus(status);
     }
 
     void setTimeString(std::string time){
-        lv_label_set_text(timeLabel, ("в " + time).c_str());
+        std::string str;
+         
+        if (time.length() != 0){
+            str = "в " + time;
+        }
+        
+        lv_label_set_text(timeLabel, str.c_str());
     }
 
     void stateChanged(bool newState) override{

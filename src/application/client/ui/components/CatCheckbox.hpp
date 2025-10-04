@@ -36,8 +36,10 @@ public:
         lv_obj_add_event_cb(checkboxObj, event_handler, LV_EVENT_CLICKED, this);
     }
 
-    void setStatus(bool status){
+    void setStatus(bool status, bool downChangeImageVisibility = false){
         this->status = status;
+
+        if (downChangeImageVisibility) return;
 
         if (status){
             lv_obj_clear_flag(catImage, LV_OBJ_FLAG_HIDDEN);
@@ -65,7 +67,7 @@ private:
     }
 
     void _stateChanged(){
-        setStatus(!status);
+        setStatus(!status, true);
 
         if (receiver != nullptr){
             receiver->stateChanged(status);
