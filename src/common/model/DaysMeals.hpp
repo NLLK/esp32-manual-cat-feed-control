@@ -32,6 +32,13 @@ public:
         this->day = day;
     }
 
+    std::string toString(){
+        char buffer[64] = {'\0',};
+        sprintf(buffer, "DaysMeals(%s, meals number: %d)", day.getDateTimeString().c_str(), meals.size());
+
+        return std::string(buffer);
+    }
+
 private:
     std::map<MealType,MealEntity> meals;
     CommonDateTime day;

@@ -26,6 +26,10 @@ public:
         return std::string(buffer);
     }
 
+    std::string getDateTimeString(){
+        return getDateString() + " " + getTimeString();
+    }
+
     void deserializeTimeFromString(std::string time){
         sscanf(time.c_str(), TIME_STRING_FORMAT, &hours, &minutes);
     }

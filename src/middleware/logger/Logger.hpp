@@ -32,7 +32,7 @@ public:
     void debug(std::string format, ...){
         va_list args;
         va_start(args, format);
-        log(LoggingLevel::INFO, format, &args);
+        log(LoggingLevel::DEBUG, format, &args);
         va_end(args);
     }
 

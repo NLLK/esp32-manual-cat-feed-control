@@ -51,7 +51,7 @@ int main(void)
     CommonDateTime dt(25,9,30,19,13,00);
 
     serverConnectionProxyAdapter->setCurrentTime(dt);
-    eventHandler->setTime(dt);
+    eventHandler->updateTime(dt);
 
     while(1){
         loop();

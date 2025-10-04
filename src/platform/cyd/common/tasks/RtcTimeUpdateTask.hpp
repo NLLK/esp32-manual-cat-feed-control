@@ -50,7 +50,7 @@ protected:
             DateTime now = rtc.now();
 
             if (xSemaphoreTake(*xRtcMutex, 5000) == pdTRUE){
-                CommonDateTime dt(now.year(), now.month(), now.day(), now.hour(), now.minute(), now.second());
+                CommonDateTime dt(now.year()-2000, now.month(), now.day(), now.hour(), now.minute(), now.second());
                 timeUpdatePort->updateTime(dt);
                 xSemaphoreGive(*xRtcMutex);
             }

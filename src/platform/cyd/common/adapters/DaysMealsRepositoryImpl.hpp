@@ -6,10 +6,8 @@
 #include <LittleFS.h>
 #include <ArduinoJson.h>
 
-class LittleFsFileSystem{
-public:
-
-};
+#include "middleware/logger/Logger.hpp"
+#define CLASS_NAME_HEADER std::string("platform.cyd.DaysMealsRepositoryInMemoryImpl: ")
 
 class FileNameCreator{
 public:
@@ -46,6 +44,7 @@ public:
         DeserializationError error = deserializeJson(doc, json);
 
         if (error) {
+            LOG.error("platform.cyd.DaysMealsToJsonStringMapper: deserializationError: %s", error.c_str());
             return DaysMeals();
         }
 
@@ -57,7 +56,7 @@ public:
 
         JsonArray mealsArray = doc["meals"].as<JsonArray>();
         for (JsonObject mealObj : mealsArray){
-            CommonDateTime time;
+            CommonDateTime time = day;
             time.deserializeTimeFromString(mealObj["time"].as<std::string>());
 
             MealEntity meal(
@@ -65,6 +64,8 @@ public:
                 mealObj["status"].as<bool>(),
                 time
             );
+
+            LOG.error("platform.cyd.DaysMealsToJsonStringMapper: deserialized meal: %s", meal.toString().c_str());
 
             res.append(meal);
         }
@@ -76,30 +77,24 @@ public:
 class DaysMealsRepositoryInMemoryImpl: public DaysMealsRepository{
 public:
     int create(DaysMeals entity){
-        std::string filePath = FileNameCreator::createFileName(entity.getDay());
-        File file = LittleFS.open(filePath.c_str(), FILE_WRITE);
-        if (!file){
-            return -1;
-        }
-
-        std::string json = DaysMealsToJsonStringMapper::map(entity);
-        if(!file.print(json.c_str())) {
-            file.close();
-            return -1;
-        }
-        file.close();
-
-        return -1;
+        LOG.debug(CLASS_NAME_HEADER + "create called");
+        return writeToFile(entity);
     }
     int getByDay(CommonDateTime day, DaysMeals* result){
+        LOG.debug(CLASS_NAME_HEADER + "getByDay called: day: %s", day.getDateString().c_str());
+
         std::string filePath = FileNameCreator::createFileName(day);
 
+        LOG.debug(CLASS_NAME_HEADER + "getByDay: filePath created: %s", filePath.c_str());
+
         if (!LittleFS.exists(filePath.c_str())){
-            return -1;
+            LOG.debug(CLASS_NAME_HEADER + "getByDay: file doesn't exist");
+            return 0;
         }
 
         File file = LittleFS.open(filePath.c_str(), FILE_READ);
         if(!file) {
+            LOG.error(CLASS_NAME_HEADER + "getByDay: can't open file with read permission");
             return -1;
         }
         
@@ -107,20 +102,44 @@ public:
         while(file.available()) {
             json += file.read();
         }
-        Serial.println(json.c_str());
+        LOG.debug(CLASS_NAME_HEADER + "getByDay: read json: %s", json.c_str());
         file.close();
         
         *result = DaysMealsToJsonStringMapper::map(json);
+        LOG.debug(CLASS_NAME_HEADER + "getByDay: json mapped to: %s", result->toString().c_str());
 
-        return 0;
+        return 1;
     }
     int update(DaysMeals entity){
-        return -1;
+        LOG.debug(CLASS_NAME_HEADER + "update called");
+        return writeToFile(entity);
     }
     int remove(DaysMeals entity){
+        LOG.debug(CLASS_NAME_HEADER + "remove called");
         return -1;
     }
     int getListWithDates(std::list<DaysMeals>* result){
+        LOG.debug(CLASS_NAME_HEADER + "getListWithDates called");
         return -1;
+    }
+private:
+    int writeToFile(DaysMeals entity){
+        std::string filePath = FileNameCreator::createFileName(entity.getDay());
+        File file = LittleFS.open(filePath.c_str(), FILE_WRITE);
+        if (!file){
+            LOG.error(CLASS_NAME_HEADER + "writeToFile: can't open file with write permission");
+            return -1;
+        }
+
+        std::string json = DaysMealsToJsonStringMapper::map(entity);
+        if(!file.print(json.c_str())) {
+            LOG.error(CLASS_NAME_HEADER + "writeToFile: can't write file");
+            file.close();
+            return -1;
+        }
+        LOG.debug(CLASS_NAME_HEADER + "writeToFile: write json to file: %s, %s", json.c_str(), filePath.c_str());
+        file.close();
+
+        return 0;
     }
 };

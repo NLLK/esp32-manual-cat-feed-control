@@ -10,5 +10,6 @@ public:
 
     void output(std::string string) override {
         printf("%s\n", string.c_str());
+        fflush(stdout);
     }
 };

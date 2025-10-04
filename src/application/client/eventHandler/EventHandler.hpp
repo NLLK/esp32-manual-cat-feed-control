@@ -30,14 +30,9 @@ public:
     }
 
     void updateTime(CommonDateTime time){
-        LOG.info(CLASS_NAME_HEADER + "updateTime called");
+        LOG.info(CLASS_NAME_HEADER + "updateTime called: %s", time.getDateTimeString().c_str());
         currentTime = time;
         clientAppearanceInterface->setCurrentTime(time);
-    }
-
-    void setTime(CommonDateTime time){
-        LOG.info(CLASS_NAME_HEADER + "setTime called");
-        updateTime(time);
     }
 
     void setBrightness(uint8_t percent){
@@ -50,6 +45,8 @@ public:
         clientAppearanceInterface->setMealStatus(mealType, newState, currentTime);
 
         MealEntity meal(mealType, newState, currentTime);
+        LOG.debug(CLASS_NAME_HEADER + "mealStateChanged created meal: %s", meal.toString().c_str());
+
         serverConnection->updateMealStatus(meal);
     }
 private:

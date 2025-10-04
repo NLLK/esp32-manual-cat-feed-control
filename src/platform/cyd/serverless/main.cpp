@@ -35,7 +35,7 @@ SemaphoreHandle_t xRtcMutex;
 
 void setup_application(){
     serverConnectionProxyAdapter = new ServerConnectionProxyAdapter();
-    eventHandler = new EventHandler(&brightness);
+    eventHandler = new EventHandler(&brightness, serverConnectionProxyAdapter);
 
     ui = new Ui(eventHandler, eventHandler);
     ui->init_screen(lv_scr_act());
@@ -69,6 +69,7 @@ void setup(){
   	Wire1.begin(21, 22);
 
     Logger::setLoggerPort(new LoggerAdapter());
+    Logger::setLoggingLevel(LoggingLevel::DEBUG);
 
     setup_application();
     setup_fs();

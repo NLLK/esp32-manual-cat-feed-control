@@ -27,7 +27,7 @@ public:
     }
 
     void updateMealStatus(MealEntity entity){
-        LOG.info(CLASS_NAME_HEADER + "updateMealStatus called");
+        LOG.info(CLASS_NAME_HEADER + "updateMealStatus called: %s", entity.toString().c_str());
         daysMealsService->updateMealStatus(entity);
     }
 

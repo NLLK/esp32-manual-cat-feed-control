@@ -4,26 +4,32 @@
 
 #include "common/model/MealEntity.hpp"
 
+#include "middleware/logger/Logger.hpp"
+#define CLASS_NAME_HEADER std::string("server.DaysMealsService: ")
+
 class DaysMealsService{
 public: 
     DaysMealsService(DaysMealsRepository* daysMealsRepository = nullptr) : daysMealsRepository(daysMealsRepository){}
 
     int updateMealStatus(MealEntity meal){
-        std::list<DaysMeals> mealsDates;
-        daysMealsRepository->getListWithDates(&mealsDates);
+        LOG.info(CLASS_NAME_HEADER + "updateMealStatus called: %s", meal.toString().c_str());
 
-        bool foundInList = false;
-        DaysMeals foundDate = findDateInList(&mealsDates, meal.getDateTime(), &foundInList);
+        DaysMeals daysMeal;
+        int res = daysMealsRepository->getByDay(meal.getDateTime(), &daysMeal);
 
-        foundDate.append(meal);
-        
-        if (!foundInList){
-            daysMealsRepository->create(foundDate);
+        daysMeal.append(meal);
+
+        if (res == 0){
+            daysMealsRepository->create(daysMeal);
+        }else if (res > 0){
+            daysMealsRepository->update(daysMeal);
+            res = 0;
         }else{
-            daysMealsRepository->update(foundDate);
+            res = -1;
         }
 
-        return 0;
+        LOG.info(CLASS_NAME_HEADER + "updateMealStatus returns: %d", res);
+        return res;
     }
 
     DaysMeals getMealsOfTheDay(CommonDateTime day){
@@ -37,15 +43,4 @@ public:
 private:
     DaysMealsRepository* daysMealsRepository = nullptr;
 
-private:
-    DaysMeals findDateInList(std::list<DaysMeals>* mealsDates, CommonDateTime dateToFind, bool* isFound){
-        for (DaysMeals meal: *mealsDates){
-            if (meal.getDay().isTheSameDay(dateToFind)){
-                *isFound = true; 
-                return meal;
-            }
-        }
-        *isFound = false;
-        return DaysMeals();
-    }
 };

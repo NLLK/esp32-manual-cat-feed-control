@@ -35,7 +35,7 @@ public:
     }
 
     void setCurrentTime(CommonDateTime time) override {
-        LOG.info(CLASS_NAME_HEADER + "setCurrentTime called: %s", time.getTimeString().c_str());
+        LOG.info(CLASS_NAME_HEADER + "setCurrentTime called: %s", time.getDateTimeString().c_str());
         std::string str = time.getTimeString();
         statusBar.setTimeString(str);
     }
