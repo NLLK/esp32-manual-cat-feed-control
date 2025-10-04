@@ -1,6 +1,6 @@
 #pragma once
 
-#include "set"
+#include "map"
 
 #include "./MealEntity.hpp"
 
@@ -16,11 +16,11 @@ public:
         }
 
         if (meal.getDateTime().isTheSameDay(day)){
-            meals.insert(meal);
+            meals[meal.getType()] = meal;
         }
     }
 
-    const std::set<MealEntity> getAll(){
+    const std::map<MealType, MealEntity> getAll(){
         return meals;
     }
 
@@ -28,7 +28,11 @@ public:
         return day;
     }
 
+    void setDay(CommonDateTime day){
+        this->day = day;
+    }
+
 private:
-    std::set<MealEntity> meals;
+    std::map<MealType,MealEntity> meals;
     CommonDateTime day;
 };

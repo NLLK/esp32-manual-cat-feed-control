@@ -13,12 +13,28 @@ public:
         std::string res;
         char buffer[6] = {'\0',};
 
-        sprintf(buffer, "%02d:%02d", hours, minutes);
+        sprintf(buffer, TIME_STRING_FORMAT, hours, minutes);
         res = std::string(buffer);
 
         return res;
     }
+
+    std::string getDateString(){
+        char buffer[sizeof("2025-01-01\0")] = {'\0',};
+        sprintf(buffer, DATE_STRING_FORMAT, yearFrom2000 + 2000, month, day);
+
+        return std::string(buffer);
+    }
+
+    void deserializeTimeFromString(std::string time){
+        sscanf(time.c_str(), TIME_STRING_FORMAT, &hours, &minutes);
+    }
     
+    void deserializeDateFromString(std::string date){
+        sscanf(date.c_str(), DATE_STRING_FORMAT, &yearFrom2000, &month, &day);
+        yearFrom2000 -= 2000;
+    }
+
     void setHours(uint8_t hours){
         this->hours = hours;
     }
@@ -75,4 +91,8 @@ public:
     uint8_t hours = 0;
     uint8_t minutes = 0;
     uint8_t seconds = 0;
+
+private:
+    const char* DATE_STRING_FORMAT = "%d-%02d-%02d";
+    const char* TIME_STRING_FORMAT = "%02d:%02d";
 };

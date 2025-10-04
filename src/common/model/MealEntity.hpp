@@ -5,7 +5,11 @@
 
 class MealEntity{
 public:
-    MealEntity(MealType type, bool status, CommonDateTime time){}
+
+    MealEntity(){}
+
+    MealEntity(MealType type, bool status, CommonDateTime time) 
+    : type(type), status(status), time(time){}
 
     bool operator< (const MealEntity& e) const {
         return (int)type < (int)e.type;
@@ -13,6 +17,14 @@ public:
 
     CommonDateTime getDateTime(){
         return time;
+    }
+
+    bool getStatus(){
+        return status;
+    }
+
+    MealType getType(){
+        return type;
     }
 
 private:

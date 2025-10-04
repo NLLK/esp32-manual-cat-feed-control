@@ -15,6 +15,7 @@
 #include "../common/tasks/ClientUpdateTimeTask.hpp"
 
 #include "./server_setup.hpp"
+#include "./fs_setup.hpp"
 
 Ui* ui;
 EventHandler* eventHandler;
@@ -65,6 +66,7 @@ void setup(){
   	Wire1.begin(21, 22);
 
     setup_application();
+    setup_fs();
     setup_server();
     serverConnectionProxyAdapter->setServerEventHandler(serverEventHandler);
 
