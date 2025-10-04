@@ -63,8 +63,6 @@ void setup(){
     LVGL_CYD::begin(USB_DOWN);
 	LVGL_CYD::backlight(20);
 
-	lv_tick_set_cb((lv_tick_get_cb_t)millis);
-
   	Serial.begin(115200);       	
   	Wire1.begin(21, 22);
 
