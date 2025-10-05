@@ -39,7 +39,7 @@ protected:
     }
 private:
     void setCurrentTimeFromServer(){
-        currentTime = serverConnectionPort->getCurrentTime();   
+        serverConnectionPort->getCurrentTime(&currentTime);   
     }
 
     void attemptToSyncronizeTimeWithServer(uint8_t attempts){

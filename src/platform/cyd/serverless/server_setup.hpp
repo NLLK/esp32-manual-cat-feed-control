@@ -7,7 +7,7 @@ DaysMealsService* daysMealsService;
 DaysMealsRepository* daysMealsRepository;
 
 void setup_server(){
-    daysMealsRepository = new DaysMealsRepositoryInMemoryImpl();
+    daysMealsRepository = new DaysMealsRepositoryImpl();
     daysMealsService = new DaysMealsService(daysMealsRepository);
 
     serverEventHandler = new ApplicationServer::EventHandler(daysMealsService);

@@ -17,6 +17,7 @@ public:
         DaysMeals daysMeal;
         int res = daysMealsRepository->getByDay(meal.getDateTime(), &daysMeal);
 
+        daysMeal.setDay(meal.getDateTime());
         daysMeal.append(meal);
 
         if (res == 0){

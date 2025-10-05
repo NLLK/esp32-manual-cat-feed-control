@@ -16,7 +16,7 @@ public:
 class EventHandlerTimeSetPort{
 public:
     virtual ~EventHandlerTimeSetPort(){};
-    virtual void setTime(CommonDateTime time) = 0;
+    virtual int setTime(CommonDateTime time) = 0;
 };
 
 class EventHandler : public EventHandlerTimeUpdatePort, public EventHandlerTimeSetPort{
@@ -26,18 +26,24 @@ public:
 
     }
 
-    void updateMealStatus(MealEntity entity){
+    int updateMealStatus(MealEntity entity){
         LOG.info(CLASS_NAME_HEADER + "updateMealStatus called: %s", entity.toString().c_str());
         daysMealsService->updateMealStatus(entity);
+
+        return 0;
     }
 
-    DaysMeals getMealsOfTheDay(CommonDateTime day){
+    int getMealsOfTheDay(CommonDateTime day, DaysMeals* resultHandler){
         LOG.info(CLASS_NAME_HEADER + "getMealsOfTheDay called");
-        return daysMealsService->getMealsOfTheDay(day);
+
+        *resultHandler = daysMealsService->getMealsOfTheDay(day); 
+
+        return 0;
     }
-    CommonDateTime getCurrentTime(){
+    int getCurrentTime(CommonDateTime* resultHandler){
         LOG.info(CLASS_NAME_HEADER + "getCurrentTime called");
-        return currentTime;
+        *resultHandler = currentTime;
+        return 0;
     }
 
     void updateTime(CommonDateTime time){
@@ -45,10 +51,12 @@ public:
         currentTime = time;
     }
 
-    void setTime(CommonDateTime time){
+    int setTime(CommonDateTime time){
         LOG.info(CLASS_NAME_HEADER + "setTime called");
         rtc->setCurrentTime(time);
         updateTime(time);
+
+        return 0;
     }
     
 private:

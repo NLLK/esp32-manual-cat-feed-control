@@ -49,6 +49,27 @@ public:
 
         serverConnection->updateMealStatus(meal);
     }
+
+    void getMealsFromTheServer(){
+        LOG.info(CLASS_NAME_HEADER + "getMealsFromTheServer called");
+
+        DaysMeals meals;
+        serverConnection->getMealsOfTheDay(currentTime, &meals);
+
+        if (meals.getDay().isEmpty()){
+            LOG.info(CLASS_NAME_HEADER + "getMealsFromTheServer: got empty meals for today: %s", meals.toString().c_str());
+            return;
+        } 
+
+        LOG.info(CLASS_NAME_HEADER + "getMealsFromTheServer: got meals: %s", meals.toString().c_str());
+
+        for (const auto& kv : meals.getAll()) {
+            MealEntity entity = kv.second;
+
+            clientAppearanceInterface->setMealStatus(entity.getType(), entity.getStatus(), entity.getDateTime());
+        }
+    }
+
 private:
     //DI
     ClientAppearanceInterface* clientAppearanceInterface = nullptr;

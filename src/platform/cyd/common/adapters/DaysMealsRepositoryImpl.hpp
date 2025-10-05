@@ -74,7 +74,7 @@ public:
     }
 };
 
-class DaysMealsRepositoryInMemoryImpl: public DaysMealsRepository{
+class DaysMealsRepositoryImpl: public DaysMealsRepository{
 public:
     int create(DaysMeals entity){
         LOG.debug(CLASS_NAME_HEADER + "create called");

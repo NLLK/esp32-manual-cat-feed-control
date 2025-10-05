@@ -13,6 +13,7 @@
 #include "../common/tasks/RtcTimeUpdateTask.hpp"
 #include "../common/tasks/RtcTimeSetTask.hpp"
 #include "../common/tasks/ClientUpdateTimeTask.hpp"
+#include "../common/tasks/FsmTask.hpp"
 
 #include "./server_setup.hpp"
 #include "./fs_setup.hpp"
@@ -33,6 +34,8 @@ RtcTimeUpdateTask* rtcUpdateTask;
 RtcTimeSetTask* rtcSetTask;
 SemaphoreHandle_t xRtcMutex;
 
+FsmTask* fsmTask;
+
 void setup_application(){
     serverConnectionProxyAdapter = new ServerConnectionProxyAdapter();
     eventHandler = new EventHandler(&brightness, serverConnectionProxyAdapter);
@@ -51,12 +54,15 @@ void setup_tasks(){
     rtc.setTimeSetTask(rtcSetTask);
 
     clientUpdateTimeTask = new ClientUpdateTimeTask(eventHandler, serverConnectionProxyAdapter);
+    fsmTask = new FsmTask();
+    fsmTask->setEventHandler(eventHandler);
 }
 
 void start_tasks(){
     rtcUpdateTask->start();
     guiTask.start();
     clientUpdateTimeTask->start();
+    fsmTask->start();
 }
 
 void setup(){

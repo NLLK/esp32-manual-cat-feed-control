@@ -12,17 +12,17 @@ public:
         this->serverEventHandler = serverEventHandler;
     }
 
-    void updateMealStatus(MealEntity entity){
-        serverEventHandler->updateMealStatus(entity);
+    int updateMealStatus(MealEntity entity){
+        return serverEventHandler->updateMealStatus(entity);
     };
-    DaysMeals getMealsOfTheDay(CommonDateTime day){
-        return serverEventHandler->getMealsOfTheDay(day);
+    int getMealsOfTheDay(CommonDateTime day, DaysMeals* resultHandler){
+        return serverEventHandler->getMealsOfTheDay(day, resultHandler);
     }
-    CommonDateTime getCurrentTime(){
-        return serverEventHandler->getCurrentTime();
+    int getCurrentTime(CommonDateTime* resultHandler){
+        return serverEventHandler->getCurrentTime(resultHandler);
     }
-    void setCurrentTime(CommonDateTime time){
-        serverEventHandler->setTime(time);
+    int setCurrentTime(CommonDateTime time){
+        return serverEventHandler->setTime(time);
     }
 private:
     ApplicationServer::EventHandler* serverEventHandler = nullptr;
