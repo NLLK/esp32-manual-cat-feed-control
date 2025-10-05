@@ -9,8 +9,8 @@ public:
     BrightnessControllerAdapter(){}
     
     void setBrightness(uint8_t percents) override{
-        if (percents < 10){
-            percents = 10;
+        if (percents < 2){
+            percents = 2;
         }
         LVGL_CYD::backlight(255*percents/100);
     }
